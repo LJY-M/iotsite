@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /iotsite
+
+spring:
+  application:
+    name: iotsite
+#数据源配置
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://39.106.66.219:3306/smart_db?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.jdbc.Driver
+
+#mybstis-plus日志在控制台输出
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#配置逻辑删除，0为删除，1为未删除
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 0
+      logic-not-delete-value: 1
