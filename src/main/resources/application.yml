@@ -18,9 +18,11 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-#配置逻辑删除，0为删除，1为未删除
+
+  #配置逻辑删除，0为未删除，1为已删除
   global-config:
     db-config:
-      logic-delete-field: deleted
-      logic-delete-value: 0
-      logic-not-delete-value: 1
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      #主键自增
+      id-type: auto
