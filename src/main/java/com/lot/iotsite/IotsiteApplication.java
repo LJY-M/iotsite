@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@MapperScan({"com.Iot.iotsite.mapper"})
+@MapperScan({"com.lot.iotsite.mapper"})
 @SpringBootApplication
 public class IotsiteApplication {
 
