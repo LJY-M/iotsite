@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class BaseEntity {
 
     @TableId(value = "id")
-    @ApiModelProperty("id")
+    @ApiModelProperty(value = "id")
     private Integer id;
 
     @TableLogic(value = "deleted")

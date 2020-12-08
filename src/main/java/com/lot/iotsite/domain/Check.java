@@ -1,4 +1,4 @@
-package com.lot.iotsite.constant;
+package com.lot.iotsite.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
