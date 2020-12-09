@@ -10,8 +10,11 @@ import lombok.Data;
 public class ProjectToCheckSystem extends BaseEntity {
 
     @TableField("project_id")
-    private int projectId;
+    private Long projectId;
 
     @TableField("father_id")
-    private int fatherId;
+    private Long fatherId;
+
+    public static final String PROJECT_ID = "project_id";
+    public static final String FATHER_ID = "father_id";
 }

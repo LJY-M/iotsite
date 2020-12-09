@@ -17,11 +17,15 @@ public class CheckSystem extends BaseEntity {
     private String name;
 
     @TableField("weight")
-    private int weight;
+    private Integer weight;
 
 //    If it is null, the system is a first-level system
 //    If not null, the system is a secondary system,
 //    and the value corresponds to its parent system ID
     @TableField("father_id")
-    private int fatherId;
+    private Long fatherId;
+
+    public static final String NAME = "name";
+    public static final String WEIGHT = "weight";
+    public static final String FATHER_ID = "father_id";
 }

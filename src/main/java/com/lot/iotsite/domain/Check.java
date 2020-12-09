@@ -12,29 +12,39 @@ import java.time.LocalDateTime;
 public class Check extends BaseEntity {
 
     @TableField("project_id")
-    private int projectId;
+    private Long projectId;
 
     @TableField("group_id")
-    private int groupId;
+    private Long groupId;
 
     @TableField("user_id")
-    private int userId;
+    private Long userId;
 
     @TableField("checksys_id")
-    private int checkSystemId;
+    private Integer checkSystemId;
 
     @TableField("grade")
-    private int grade;
+    private Integer grade;
 
     @TableField("description")
     private String description;
 
     @TableField("exam_state")
-    private int examState;
+    private Integer examState;
 
     @TableField("pass_state")
-    private int passState;
+    private Integer passState;
 
     @TableField("finish_time")
     private LocalDateTime finishDateTime;
+
+    public static final String PROJECT_ID = "project_id";
+    public static final String GROUP_ID = "group_id";
+    public static final String USER_ID = "user_id";
+    public static final String CHECK_SYSTEM_ID = "checksys_id";
+    public static final String GRADE = "grade";
+    public static final String DESCRIPTION = "description";
+    public static final String EXAM_STATE = "exam_state";
+    public static final String PASS_STATE = "pass_state";
+    public static final String FINISH_DATA_TIME = "finish_time";
 }
