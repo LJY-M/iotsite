@@ -13,7 +13,7 @@ public class BaseEntity {
 
     @TableId(value = "id")
     @ApiModelProperty(value = "id")
-    private Integer id;
+    private Long id;
 
     @TableLogic(value = "deleted")
     @ApiModelProperty(value = "逻辑删除")

@@ -9,7 +9,9 @@ public enum ResultCode {
     USER_LOGIN_ERROR(2002, "账号不存在或密码错误"),
     USER_ACCOUNT_FORBIDDEN(2003, "账号已被禁用"),
     USER_NOT_EXIST(2004, "用户不存在"),
-    USER_HAS_EXISTED(2005, "用户已存在"),
+    USER_PASSWORD_FAIL(2005, "密码错误"),
+    USER_HAS_EXISTED(2006, "用户已存在"),
+    USER_LOGIN_FAIL(2007,"登录失败"),
 
     /* 系统错误：3001- 3999*/
     SYSTEM_INNER_ERROR(3001, "系统繁忙，请稍后重试"),
