@@ -19,13 +19,12 @@ public class JwtUtils {
     private String header = "token";
 
     /**
-     * 生成jwt token
+     * 生成jwt, 得到token
      */
     public String generateToken(long userId) {
         System.out.println(secret+" "+expire+" "+header);
-        Date nowDate= (Date) new Date();
-        // 过期时间
-        Date expireDate = new Date(((Date) nowDate).getTime()+expire*1000);
+        Date nowDate= new Date();
+        Date expireDate = new Date((nowDate).getTime()+expire*1000);
 
         return Jwts.builder()
                 .setHeaderParam("typ","JWT")
@@ -36,9 +35,8 @@ public class JwtUtils {
                 .compact();
     }
 
-    // 获取jwt的信息
     /**
-     * 校验 jwt token
+     * 校验 jwt, 获取token的信息
      */
     public Claims getClaimByToken(String token) {
         try{
@@ -48,7 +46,7 @@ public class JwtUtils {
                     .getBody();
         }catch (Exception e){
             System.out.println(" validate is token error " + e);
-//            log.debug(" validate is token error ", e);
+                System.out.println(" validate is token error : " + e);
             return null;
         }
     }
