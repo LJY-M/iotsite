@@ -11,8 +11,8 @@ public interface CheckSystemService {
     List<CheckSystemDto> getAllCheckSystem();
     List<CheckSystem> getSubCheckSystemById(Long fatherId);
     Boolean insertCheckSystem(CheckSystem checkSystem);
-    Boolean deleteOneLevelCheckSystem(Long id);
-    Boolean deleteSubCheckSystem(Long id);
+    Boolean deleteCheckSystem(Long id);
     CheckSystem getCheckSystemById(Long id);
     Boolean updateCheckSystem(CheckSystem checkSystem);
+    List<CheckSystemDto> getChechSystemByName(String name);
 }

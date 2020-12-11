@@ -6,6 +6,7 @@ import com.lot.iotsite.queryParam.CheckSystemParam;
 import com.lot.iotsite.service.CheckSystemService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +62,47 @@ public class CheckSystemController{
         return checkSystemDtos;
     }
 
-    
+    /**
+     * 删除一个检查体系
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/check_system/{id}")
+    public Boolean deleteCheckSystem(@PathVariable("id") Long id){
+        return checkSystemService.deleteCheckSystem(id);
+    }
+    /**
+     * 通过id获取健康体系的信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/check_system/{id}")
+    public CheckSystemDto getChechSystemById(@PathVariable("id") Long id){
+        CheckSystem checkSystem=checkSystemService.getCheckSystemById(id);
+        Assert.notNull(checkSystem,"无此检查体系！");
+        CheckSystemDto checkSystemDto=new CheckSystemDto();
+        BeanUtils.copyProperties(checkSystem,checkSystemDto);
+        return checkSystemDto;
+    }
+
+    /**
+     * 更改检查体系信息
+     * @param checkSystem
+     * @return
+     */
+    @PutMapping("/check_system")
+    public Boolean updateCheckSystem(@SpringQueryMap CheckSystem checkSystem){
+        return checkSystemService.updateCheckSystem(checkSystem);
+    }
+
+    /**
+     * 通过name获取健康体系的信息
+     * @param name
+     * @return
+     */
+    @GetMapping("/check_system")
+    public List<CheckSystemDto> getChechSystemByName(@RequestParam("name") String name){
+        return checkSystemService.getChechSystemByName(name);
+    }
 
 }

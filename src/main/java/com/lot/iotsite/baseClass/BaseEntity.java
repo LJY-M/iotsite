@@ -15,7 +15,7 @@ public class BaseEntity {
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @TableLogic(value = "deleted")
+    @TableLogic(value = "0")
     @ApiModelProperty(value = "逻辑删除")
     private Integer deleted;
 

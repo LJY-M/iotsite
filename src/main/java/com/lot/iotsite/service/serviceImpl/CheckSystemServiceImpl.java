@@ -66,23 +66,21 @@ public class CheckSystemServiceImpl implements CheckSystemService {
     }
 
     @Override
-    public Boolean deleteOneLevelCheckSystem(Long id) {
+    public Boolean deleteCheckSystem(Long id) {
        CheckSystem checkSystem=getCheckSystemById(id);
-       Assert.isNull(checkSystem,"该检查体系不存在！");
-       List<CheckSystem> subCheckSystems=getSubCheckSystemById(id);
-       checkSystemMapper.deleteBatchIds(subCheckSystems);
+       Assert.notNull(checkSystem,"该检查体系不存在！");
+       if(0==checkSystem.getFatherId()) {
+           List<CheckSystem> subCheckSystems = getSubCheckSystemById(id);
+           List<Long> idList=new ArrayList<>();
+           for(CheckSystem item:subCheckSystems){
+               idList.add(item.getId());
+           }
+           checkSystemMapper.deleteBatchIds(idList);
+       }
        checkSystemMapper.deleteById(id);
        return true;
     }
 
-
-    @Override
-    public Boolean deleteSubCheckSystem(Long id) {
-        CheckSystem checkSystem=getCheckSystemById(id);
-        Assert.isNull(checkSystem,"该检查体系不存在！");
-        checkSystemMapper.deleteById(id);
-        return true;
-    }
 
     @Override
     public CheckSystem getCheckSystemById(Long id) {
@@ -91,8 +89,26 @@ public class CheckSystemServiceImpl implements CheckSystemService {
 
     @Override
     public Boolean updateCheckSystem(CheckSystem checkSystem) {
-       Assert.isTrue(1!=checkSystemMapper.updateById(checkSystem),"更改检查体系信息失败！");
-       return true;
+        CheckSystem checkSystem1=getCheckSystemById(checkSystem.getId());
+        Assert.notNull(checkSystem,"该检查体系不存在！");
+        checkSystem.setFatherId(checkSystem1.getFatherId());
+        Assert.isTrue(1==checkSystemMapper.updateById(checkSystem),"更改检查体系信息失败！");
+        return true;
     }
+
+    @Override
+    public List<CheckSystemDto> getChechSystemByName(String name) {
+       List<CheckSystemDto> checkSystemDtos=new ArrayList<>();
+       QueryWrapper<CheckSystem> queryWrapper=new QueryWrapper<>();
+       queryWrapper.like(CheckSystem.NAME,name);
+       List<CheckSystem> checkSystems=checkSystemMapper.selectList(queryWrapper);
+       for(CheckSystem item: checkSystems){
+           CheckSystemDto checkSystemDto=new CheckSystemDto();
+           BeanUtils.copyProperties(item,checkSystemDto);
+           checkSystemDtos.add(checkSystemDto);
+       }
+       return checkSystemDtos;
+    }
+
 
 }
