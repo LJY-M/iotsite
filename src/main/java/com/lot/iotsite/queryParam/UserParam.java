@@ -16,5 +16,4 @@ public class UserParam {
     private String address;
     private Integer telephone;
     private String job;
-
 }
