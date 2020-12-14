@@ -1,5 +1,7 @@
 package com.lot.iotsite.constant;
 
+import io.swagger.models.auth.In;
+
 public enum ResultCode {
     /* 成功状态码 */
     SUCCESS(200, "success"),
@@ -36,9 +38,9 @@ public enum ResultCode {
     public String message(){
         return message;
     }
-    public static String getMessage(String name){
+    public static String getMessage(Integer code){
         for(ResultCode item:ResultCode.values()){
-            if(item.name().equals(name)){
+            if(item.name().equals(code)){
                 return item.message;
             }
         }

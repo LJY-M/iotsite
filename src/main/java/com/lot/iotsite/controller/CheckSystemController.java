@@ -6,7 +6,6 @@ import com.lot.iotsite.queryParam.CheckSystemParam;
 import com.lot.iotsite.service.CheckSystemService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;

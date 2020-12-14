@@ -9,7 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import sun.security.krb5.internal.crypto.CksumType;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +51,7 @@ public class CheckSystemServiceImpl implements CheckSystemService {
     public List<CheckSystem> getSubCheckSystemById(Long fatherId) {
         QueryWrapper<CheckSystem> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq(CheckSystem.FATHER_ID,fatherId);
-        List<CheckSystem> checkSystems=checkSystemMapper.selectList(queryWrapper);
-        return checkSystems;
+        return checkSystemMapper.selectList(queryWrapper);
     }
 
     @Override

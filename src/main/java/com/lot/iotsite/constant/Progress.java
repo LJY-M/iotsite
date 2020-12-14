@@ -23,9 +23,9 @@ public enum Progress {
         }
          return null;
      }
-     public static String getStatus(String name){
+     public static String getStatus(Integer code){
         for(Progress item:Progress.values()){
-            if(item.name().equals(name)){
+            if(item.name().equals(code)){
                 return item.status();
             }
         }

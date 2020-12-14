@@ -62,5 +62,4 @@ public class Project extends BaseEntity {
     public static final String SUPERVISOR_UNIT="supervisor_unit";
     public static final String BUILD_UNIT="build_unit";
     public static final String CLIENT_ID="client_id";
-
 }

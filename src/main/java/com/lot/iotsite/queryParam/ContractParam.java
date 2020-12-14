@@ -1,11 +1,10 @@
 package com.lot.iotsite.queryParam;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class ContarctParam {
+public class ContractParam {
     @ApiModelProperty("委托人名称")
     private String clientName;
 
@@ -20,4 +19,5 @@ public class ContarctParam {
 
     @ApiModelProperty("委托方意向")
     private String clientIntention;
+
 }
