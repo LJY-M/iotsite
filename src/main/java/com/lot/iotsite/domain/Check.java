@@ -21,7 +21,7 @@ public class Check extends BaseEntity {
     private Long userId;
 
     @TableField("checksys_id")
-    private Integer checkSystemId;
+    private Long checkSystemId;
 
     @TableField("grade")
     private Integer grade;
