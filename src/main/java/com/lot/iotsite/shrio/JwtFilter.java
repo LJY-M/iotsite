@@ -29,7 +29,7 @@ public class JwtFilter extends AuthenticatingFilter {
     @Override
      public AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String jwt = request.getHeader("Authorazation");
+        String jwt = request.getHeader("Authorization");
         if(StringUtils.isEmpty(jwt)){
             return null;
         }
@@ -38,37 +38,30 @@ public class JwtFilter extends AuthenticatingFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
-
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String jwt = request.getHeader("Authorization");
         if(StringUtils.isEmpty(jwt)){
-            return true;
+            return true; //如何无jwt就不需要交给shrio进行拦截处理
         }else{
-            // 校验
             Claims claim = jwtUtils.getClaimByToken(jwt);
             if(claim == null || jwtUtils.isTokenExpired(claim.getExpiration())){
                 throw new ExpiredCredentialsException("token已失效,请重新登录");
             }
         }
-            // 执行登录
-            return executeLogin(servletRequest, servletResponse);
+        return executeLogin(servletRequest, servletResponse);
     }
 
     @Override
     protected  boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response){
-
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-
         Throwable throwable = e.getCause() == null ? e : e.getCause();
         Result result = Result.failure(0000,throwable.getMessage());
-        String json = JSONUtil.toJsonStr(request);
-
+        String json = JSONUtil.toJsonStr(result);
         try{
             httpServletResponse.getWriter().println(json);
         }catch (IOException ioException){
             System.out.println("登录异常");
         }
-
         return false;
     }
 
