@@ -66,5 +66,4 @@ public class JwtUtils {
     public boolean isTokenExpired(Date expiration) {
         return expiration.before(new Date());
     }
-
 }

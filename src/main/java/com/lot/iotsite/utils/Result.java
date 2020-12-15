@@ -5,6 +5,7 @@ import com.lot.iotsite.constant.ResultCode;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Map;
 
 @Data
 public class Result<T> implements Serializable {
