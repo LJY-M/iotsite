@@ -1,17 +1,30 @@
 package com.lot.iotsite.controller;
 
 
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.SimpleUserDto;
 import com.lot.iotsite.service.UserService;
+import com.lot.iotsite.utils.JwtUtils;
 import com.lot.iotsite.utils.Result;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+<<<<<<< .mine
 import java.util.List;
 
+
+=======
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+
+>>>>>>> .theirs
 /**
  * <p>
  * 用户表 前端控制器
@@ -28,21 +41,44 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequiresAuthentication
-    @GetMapping("/index")
-    public User index(){
-        User user = userService.getById(1234);
-        return user;
+    @Autowired
+    JwtUtils jwtUtils;
+
+    @PostMapping("/login")
+    public Map<Object,Object> login(@RequestParam(value = "account") Long account,
+                                    @RequestParam(value = "password") String password,
+                                    HttpServletResponse response) {
+        User user = userService.getOne(new QueryWrapper<User>().eq("account", account));
+        Assert.notNull(user, "用户不存在");
+        if (!user.getPassword().equals(SecureUtil.md5(password))) {
+            System.out.println("密码错误");
+            return null;
+        }
+        String jwt = jwtUtils.generateToken(user.getId(), user.getUserLimit());
+        response.setHeader("Authorization", jwt);
+        response.setHeader("Access-Control-Expose-Headers", "Authorization");
+        // 用户可以另一个接口
+        return MapUtil.builder()
+                .put("id", user.getId())
+                .put("account", user.getAccount())
+                .put("name", user.getName())
+                .map();
     }
 
-    /**
-     * 测试实体校验
-     * @param user
-     * @return
-     */
-    @PostMapping("/save")
-    public Boolean save(@Validated @RequestBody User user){
-        return true;
+//    @PostMapping("/register")
+//    public boolean register(@Validated @RequestBody User user,
+//                            HttpServletResponse response){
+//        User is_user = userService.getOne(new QueryWrapper<User>().eq("account", user.getAccount()));
+//        Assert.notNull(is_user, "用户已存在");
+//
+//    }
+
+    // 退出
+    @RequiresAuthentication
+    @GetMapping("/logout")
+    public Result logout() {
+        SecurityUtils.getSubject().logout();
+        return Result.success(null);
     }
 
     @GetMapping("/user_names")
