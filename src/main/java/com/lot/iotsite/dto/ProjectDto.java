@@ -1,10 +1,12 @@
 package com.lot.iotsite.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.lot.iotsite.domain.CheckSystem;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class ProjectDto {
@@ -44,4 +46,5 @@ public class ProjectDto {
     @ApiModelProperty("项目创建时间")
     private LocalDateTime createTime;
 
+    private List<CheckSystemDto> checkSystems;
 }
