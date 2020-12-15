@@ -7,6 +7,7 @@ import com.lot.iotsite.constant.Progress;
 import com.lot.iotsite.domain.Contract;
 import com.lot.iotsite.dto.ContractDto;
 import com.lot.iotsite.dto.ContractsDto;
+import com.lot.iotsite.dto.SimpleContractDto;
 import com.lot.iotsite.mapper.ContractMapper;
 import com.lot.iotsite.service.ContractService;
 import com.lot.iotsite.service.UserService;
@@ -95,5 +96,19 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Contract getContractById(Long id) {
         return contractMapper.selectById(id);
+    }
+
+    @Override
+    public List<SimpleContractDto> getAllContractName() {
+        QueryWrapper<Contract> queryWrapper=new QueryWrapper<>();
+        queryWrapper.orderByAsc(Contract.CLIENT_NAME);
+        List<Contract> contracts=contractMapper.selectList(queryWrapper);
+        List<SimpleContractDto> simpleContractDtos=new ArrayList<>();
+       for(Contract item:contracts){
+           SimpleContractDto simpleContractDto=new SimpleContractDto();
+           BeanUtils.copyProperties(item,simpleContractDto);
+           simpleContractDtos.add(simpleContractDto);
+       }
+       return simpleContractDtos;
     }
 }

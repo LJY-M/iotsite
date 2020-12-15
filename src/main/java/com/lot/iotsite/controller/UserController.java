@@ -2,12 +2,15 @@ package com.lot.iotsite.controller;
 
 
 import com.lot.iotsite.domain.User;
+import com.lot.iotsite.dto.SimpleUserDto;
 import com.lot.iotsite.service.UserService;
 import com.lot.iotsite.utils.Result;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -42,6 +45,9 @@ public class UserController {
         return true;
     }
 
-
+    @GetMapping("/user_names")
+    public List<SimpleUserDto> getUserNames(){
+        return userService.getUserNames();
+    }
 
 }

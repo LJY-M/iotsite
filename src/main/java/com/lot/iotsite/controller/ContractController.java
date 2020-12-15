@@ -7,6 +7,7 @@ import com.lot.iotsite.domain.Contract;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.ContractDto;
 import com.lot.iotsite.dto.ContractsDto;
+import com.lot.iotsite.dto.SimpleContractDto;
 import com.lot.iotsite.queryParam.ContractParam;
 import com.lot.iotsite.service.ContractService;
 import com.lot.iotsite.utils.AccountUtils;
@@ -16,6 +17,7 @@ import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/contract")
@@ -96,9 +98,10 @@ public class ContractController {
        return contractService.getContract(id);
     }
 
-    @GetMapping("/user")
-    public Long getUser(HttpServletRequest request) throws Exception{
-        Long userId=AccountUtils.getCurrentUser(request);
-        return userId;
-    }
+   @GetMapping("/client_names")
+   public List<SimpleContractDto> getAllContractName(){
+       return  contractService.getAllContractName();
+   }
+
+
 }

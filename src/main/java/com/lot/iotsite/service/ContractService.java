@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.domain.Contract;
 import com.lot.iotsite.dto.ContractDto;
 import com.lot.iotsite.dto.ContractsDto;
+import com.lot.iotsite.dto.SimpleContractDto;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Size;
@@ -54,4 +55,6 @@ public interface ContractService {
      ContractDto getContract(Long id);
 
      Contract getContractById(Long id);
+
+     List<SimpleContractDto> getAllContractName();
 }

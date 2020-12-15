@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.lot.iotsite.baseClass.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 
 @Data
@@ -50,7 +51,7 @@ public class Project extends BaseEntity {
 
     @TableField("client_id")
     @ApiModelProperty("委托方id")
-    private String clientId;
+    private Long clientId;
 
     public static final String NAME="name";
     public static final String GROUP_ID="group_id";

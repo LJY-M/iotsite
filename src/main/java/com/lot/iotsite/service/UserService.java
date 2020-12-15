@@ -2,6 +2,9 @@ package com.lot.iotsite.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lot.iotsite.domain.User;
+import com.lot.iotsite.dto.SimpleUserDto;
+
+import java.util.List;
 
 
 /**
@@ -26,4 +29,6 @@ public interface UserService extends IService<User> {
      * @return
      */
     User getUserByAccount(Long account);
+
+    List<SimpleUserDto> getUserNames();
 }

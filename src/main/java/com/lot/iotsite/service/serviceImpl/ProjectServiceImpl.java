@@ -5,12 +5,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.constant.Progress;
 import com.lot.iotsite.domain.Contract;
+import com.lot.iotsite.domain.Group;
 import com.lot.iotsite.domain.Project;
+import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.ContractsDto;
 import com.lot.iotsite.dto.ProjectDto;
 import com.lot.iotsite.dto.ProjectsDto;
 import com.lot.iotsite.mapper.ProjectMapper;
+import com.lot.iotsite.service.ContractService;
+import com.lot.iotsite.service.GroupService;
 import com.lot.iotsite.service.ProjectService;
+import com.lot.iotsite.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,16 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private ProjectMapper projectMapper;
+
+    @Autowired
+    private ContractService contractService;
+
+    @Autowired
+    private GroupService groupService;
+
+    @Autowired
+    private UserService userService;
+
     @Override
     public IPage<ProjectsDto> getProjects(String name, Integer status, String startTime, String endTime, IPage page) {
         IPage<ProjectsDto> projectsDtoIPage=new Page<>();
@@ -60,6 +75,15 @@ public class ProjectServiceImpl implements ProjectService {
        BeanUtils.copyProperties(project,projectDto);
        String progress= Progress.getStatus(project.getProgress());
        projectDto.setStatus(progress);
+        // 将pm_id转换给pm_name;
+        User user=userService.getUserById(project.getPmId());
+        projectDto.setPmName(user.getName());
+        //将groupID转换为groupName
+        Group group=groupService.getGroupById(project.getGroupId());
+        projectDto.setGroupName(group.getName());
+        //将clientIc转换为委托方名称
+        Contract contract=contractService.getContractById(project.getClientId());
+        projectDto.setClientName(contract.getClientName());
        return projectDto;
     }
 

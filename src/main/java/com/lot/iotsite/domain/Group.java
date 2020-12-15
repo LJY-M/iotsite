@@ -14,13 +14,12 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("t_group")
-@ApiModel("")
+@ApiModel("小组")
 public class Group {
 
-    @NotBlank(message = "组名不能为空")
     @TableField("name")
     @ApiModelProperty("组名")
-    private Long name;
+    private String name;
 
     public static final String NAME="name";
 }
