@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/project")
 public class ProjectController {
@@ -59,7 +61,8 @@ public class ProjectController {
         Project project=new Project();
         BeanUtils.copyProperties(projectParam,project);
         project.setProgress(Progress.UNDERWAY.code());
-       return  projectService.addProject(project);
+        List<Long> fatherIds=projectParam.getCheckSystems();
+       return  projectService.addProject(project,fatherIds);
     }
 
     /**
@@ -70,7 +73,8 @@ public class ProjectController {
     public Boolean updateProject(@SpringQueryMap ProjectParam projectParam){
         Project project=new Project();
         BeanUtils.copyProperties(projectParam,project);
-        return projectService.updateProject(project);
+        List<Long> fatherIds=projectParam.getCheckSystems();
+        return projectService.updateProject(project,fatherIds);
     }
 
     /**
