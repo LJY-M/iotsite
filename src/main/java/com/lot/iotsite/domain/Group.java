@@ -2,6 +2,7 @@ package com.lot.iotsite.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.lot.iotsite.baseClass.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -14,8 +15,8 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("t_group")
-@ApiModel("")
-public class Group {
+@ApiModel("小组")
+public class Group extends BaseEntity {
 
     @NotBlank(message = "组名不能为空")
     @TableField("name")
