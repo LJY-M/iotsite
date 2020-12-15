@@ -14,6 +14,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * <p>
@@ -33,7 +34,7 @@ public class User  extends BaseEntity {
     @NotBlank(message = "账号不能为空")
     @TableField("account")
     @ApiModelProperty("账号")
-    private Integer account;
+    private Long account;
 
     @TableField("name")
     @ApiModelProperty("姓名")
@@ -87,6 +88,4 @@ public class User  extends BaseEntity {
     public static final String ADDRESS="address";
     public static final String TELEPHONE="telephone";
     public static final String JOB="job";
-
-
 }
