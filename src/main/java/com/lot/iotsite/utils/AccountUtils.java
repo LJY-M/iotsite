@@ -19,6 +19,7 @@ public class AccountUtils {
 
     @Autowired
     private static JwtUtils jwtUtils;
+
     public static Long getCurrentUser(HttpServletRequest request)throws Exception {
         String jwt = request.getHeader("Authorazation");
         AuthenticationToken token=new JwtToken(jwt);
