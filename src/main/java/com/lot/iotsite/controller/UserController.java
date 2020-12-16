@@ -9,24 +9,18 @@ import com.lot.iotsite.queryParam.UserParam;
 import com.lot.iotsite.service.UserService;
 import com.lot.iotsite.utils.AccountUtils;
 import com.lot.iotsite.utils.JwtUtils;
-import com.lot.iotsite.utils.Result;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
 public class UserController {
-
     @Autowired
     private UserService userService;
 
@@ -76,30 +70,29 @@ public class UserController {
         return userService.save(user);
     }
 
-    // RequiresAuthentication保证只有用户登录成功后才能进入此界面
-    @RequiresAuthentication
-    @PostMapping("/index")
-    public boolean index(@SpringQueryMap @RequestBody UserParam userParam,
-                         HttpServletResponse response,
-                         HttpServletRequest request) throws Exception {
-        Long userID = AccountUtils.getCurrentUser(request);
-        // 登录系统进入个人信息界面后会在信息栏显示个人信息
-        User user = userService.getUserById(userID);
-
-
-        // 将个人信息页修改的参数加入到userParam中，然后拷贝到user再进行用户信息更新
-        BeanUtils.copyProperties(userParam,user);
-
-        return userService.update(user);
-    }
-
-    @RequiresAuthentication
-    @GetMapping("/logout")
-    public Result logout() {
-        SecurityUtils.getSubject().logout();
-        return Result.success(null);
-    }
-
-
+//
+//    // RequiresAuthentication保证只有用户登录成功后才能进入此界面
+//    @RequiresAuthentication
+//    @PostMapping("/index")
+//    public boolean index(@SpringQueryMap @RequestBody UserParam userParam,
+//                         HttpServletResponse response,
+//                         HttpServletRequest request) throws Exception {
+//        Long userID = AccountUtils.getCurrentUser(request);
+//        // 登录系统进入个人信息界面后会在信息栏显示个人信息
+//        User user = userService.getUserById(userID);
+//
+//
+//        // 将个人信息页修改的参数加入到userParam中，然后拷贝到user再进行用户信息更新
+//        BeanUtils.copyProperties(userParam,user);
+//
+//        return userService.update(user);
+//    }
+//
+//    @RequiresAuthentication
+//    @GetMapping("/logout")
+//    public Result logout() {
+//        SecurityUtils.getSubject().logout();
+//        return Result.success(null);
+//    }
 
 }
