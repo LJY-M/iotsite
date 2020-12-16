@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 @Data
 public class AccountProfile implements Serializable {
 
+    private Long id;
+
     private Long account;
 
     private String name;

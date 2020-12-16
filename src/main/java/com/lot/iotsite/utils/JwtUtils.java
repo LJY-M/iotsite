@@ -33,6 +33,7 @@ public class JwtUtils {
         Date expireDate = new Date((nowDate).getTime()+expire*1000);
         // 把用户id和用户limit加入到token中去
         Map<String, Object> claims = new HashMap<>();
+        claims.put("userId",userId);
         claims.put("userLimit",userLimit);
         return Jwts.builder()
                 .setHeaderParam("typ","JWT")

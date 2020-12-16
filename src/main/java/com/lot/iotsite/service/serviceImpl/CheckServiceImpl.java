@@ -7,9 +7,11 @@ import com.lot.iotsite.mapper.PictureMapper;
 import com.lot.iotsite.mapper.ProjectMapper;
 import com.lot.iotsite.service.CheckService;
 import com.lot.iotsite.service.CheckSystemService;
+import com.lot.iotsite.service.PictureService;
 import com.lot.iotsite.service.ProjectToCheckSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,9 @@ public class CheckServiceImpl implements CheckService {
 
     @Autowired
     ProjectToCheckSystemService projectToCheckSystemService;
+
+    @Autowired
+    private PictureService pictureService;
 
     @Override
     public Check getCheckById(Long id) {
@@ -201,5 +206,24 @@ public class CheckServiceImpl implements CheckService {
         //不是组长
 
         return null;
+    }
+
+    @Override
+    public Boolean deleteChecksByProjectId(Long projectId) {
+       QueryWrapper<Check> queryWrapper=new QueryWrapper<>();
+       queryWrapper.eq(Check.PROJECT_ID,projectId);
+       Assert.isTrue(1<=checkMapper.delete(queryWrapper),"删除项目检查结果失败！");
+       // 删除检查图片
+        List<Check> checks=getChecksByrojectId(projectId);
+        for(Check item:checks){
+            pictureService.deletePictureByCheckId(item.getId());
+        }
+       return true;
+    }
+
+    private List<Check> getChecksByrojectId(Long projectId){
+        QueryWrapper<Check> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq(Check.PROJECT_ID,projectId);
+        return checkMapper.selectList(queryWrapper);
     }
 }

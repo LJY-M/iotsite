@@ -10,6 +10,7 @@ import com.lot.iotsite.dto.ContractsDto;
 import com.lot.iotsite.dto.SimpleContractDto;
 import com.lot.iotsite.mapper.ContractMapper;
 import com.lot.iotsite.service.ContractService;
+import com.lot.iotsite.service.ProjectService;
 import com.lot.iotsite.service.UserService;
 import org.hibernate.validator.internal.util.Contracts;
 import org.springframework.beans.BeanUtils;
@@ -33,6 +34,9 @@ public class ContractServiceImpl implements ContractService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ProjectService projectService;
+
     @Override
     public Boolean addContract(Contract contract) {
        Assert.isTrue(1==contractMapper.insert(contract),"创建合同失败！");
@@ -48,6 +52,8 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Boolean deleteContractById(Long id) {
         Assert.isTrue(1==contractMapper.deleteById(id),"删除合同失败！");
+        //删除关联项目
+        projectService.deleteProjectByClienId(id);
         return true;
     }
 
@@ -101,7 +107,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public List<SimpleContractDto> getAllContractName() {
         QueryWrapper<Contract> queryWrapper=new QueryWrapper<>();
-        queryWrapper.orderByAsc(Contract.CLIENT_NAME);
+        queryWrapper.orderByDesc(Contract.CLIENT_NAME);
         List<Contract> contracts=contractMapper.selectList(queryWrapper);
         List<SimpleContractDto> simpleContractDtos=new ArrayList<>();
        for(Contract item:contracts){

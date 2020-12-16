@@ -11,6 +11,7 @@ import com.lot.iotsite.service.ProjectService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,8 +32,8 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/projects")
-    public IPage<ProjectsDto> getProjects(@RequestParam("name") String name,@RequestParam("status") Integer status,
-                                          @RequestParam("startTime") String startTime, @RequestParam("endTime") String endTime,
+    public IPage<ProjectsDto> getProjects(@RequestParam(value = "name",required = false) String name,@RequestParam(value = "status",required = false) Integer status,
+                                          @RequestParam(value = "startTime",required = false) String startTime, @RequestParam(value = "endTime",required = false) String endTime,
                                           @RequestParam("page.current") Long current){
         //TODO 校验参数
         IPage page=new Page<Project>();
@@ -69,11 +70,15 @@ public class ProjectController {
      * 更新项目信息
      * @return
      */
-    @PutMapping("/project")
-    public Boolean updateProject(@SpringQueryMap ProjectParam projectParam){
+    @PutMapping("/project/{id}")
+    public Boolean updateProject(@SpringQueryMap ProjectParam projectParam,@PathVariable("id") Long id){
         Project project=new Project();
+        Project project1=projectService.getProject(id);
+        Assert.isTrue(project1.getProgress().equals(Progress.FINISH.code()),"该项目已完成，无法再修改项目信息！");
         BeanUtils.copyProperties(projectParam,project);
         List<Long> fatherIds=projectParam.getCheckSystems();
+        project.setId(id);
+        project.setProgress(project1.getProgress());
         return projectService.updateProject(project,fatherIds);
     }
 

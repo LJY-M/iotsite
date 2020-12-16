@@ -11,6 +11,7 @@ import com.lot.iotsite.dto.SimpleContractDto;
 import com.lot.iotsite.queryParam.ContractParam;
 import com.lot.iotsite.service.ContractService;
 import com.lot.iotsite.utils.AccountUtils;
+import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -31,13 +32,15 @@ public class ContractController {
      * @param contractParam
      * @return
      */
-   @GetMapping("/contract")
-   public Boolean addContract(@SpringQueryMap ContractParam contractParam){
+   @PostMapping("/contract")
+   public Boolean addContract(@SpringQueryMap ContractParam contractParam,HttpServletRequest request){
        //TODO 校验参数
        Contract contract=new Contract();
        BeanUtils.copyProperties(contractParam,contract);
        contract.setProgress(Progress.CREATED.code());
-       //TODO 获取登录用户id
+       //获取登录用户id
+       Long createrId=AccountUtils.getCurrentUser(request);
+       contract.setCreaterId(createrId);
        return contractService.addContract(contract);
    }
 
@@ -46,14 +49,15 @@ public class ContractController {
      * @param contractParam
      * @return
      */
-   @PutMapping("/contract")
-   public Boolean updateContract(@SpringQueryMap ContractParam contractParam){
+   @PutMapping("/contract/{id}")
+   public Boolean updateContract(@SpringQueryMap ContractParam contractParam,@PathVariable("id") Long id){
        //TODO 校验参数
        Contract contract=new Contract();
-       Contract contract1=contractService.getContractById(contract.getId());
+       Contract contract1=contractService.getContractById(id);
        BeanUtils.copyProperties(contractParam,contract);
        contract.setProgress(contract1.getProgress());
        contract.setCreaterId(contract1.getCreaterId());
+       contract.setId(id);
        return contractService.updateContract(contract);
    }
 
@@ -62,7 +66,7 @@ public class ContractController {
      * @param id
      * @return
      */
-   @DeleteMapping("/contract/{id}")
+   @DeleteMapping("/{id}")
    public Boolean deleteContract(@PathVariable("id") Long id){
        return contractService.deleteContractById(id);
    }
@@ -78,9 +82,9 @@ public class ContractController {
      * @return
      */
    @GetMapping("/contracts")
-   public IPage<ContractsDto> getContracts(@RequestParam("name") String name, @RequestParam("type")String type,
-                                           @RequestParam("startTime")String startTime, @RequestParam("endTime")String endTime,@RequestParam("status")Integer status,
-                                           @RequestParam("page.current")Long current){
+   public IPage<ContractsDto> getContracts(@RequestParam(value = "name",required = false) String name, @RequestParam(value = "type",required = false)String type,
+                                           @RequestParam(value = "startTime",required = false)String startTime, @RequestParam(value = "endTime",required = false)String endTime,
+                                           @RequestParam(value = "status",required = false)Integer status, @RequestParam("page.current")Long current){
        //TODO 校验参数
        Page page=new Page<>();
        page.setCurrent(current);
@@ -93,7 +97,7 @@ public class ContractController {
      * @param id
      * @return
      */
-   @GetMapping("/contract/{id}")
+   @GetMapping("/{id}")
    public ContractDto getContract(@PathVariable("id") Long id){
        return contractService.getContract(id);
     }
@@ -102,6 +106,5 @@ public class ContractController {
    public List<SimpleContractDto> getAllContractName(){
        return  contractService.getAllContractName();
    }
-
 
 }

@@ -40,6 +40,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectToCheckSystemService projectToCheckSystemService;
 
+    @Autowired
+    private CheckService checkService;
+
     @Override
     public IPage<ProjectsDto> getProjects(String name, Integer status, String startTime, String endTime, IPage page) {
         IPage<ProjectsDto> projectsDtoIPage=new Page<>();
@@ -106,12 +109,23 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Boolean deleteProject(Long id) {
         Assert.isTrue(1==projectMapper.deleteById(id),"删除项目失败！");
+        //删除检查体系
         projectToCheckSystemService.deleteProjectToCheckSystems(id);
+        // 删除检查记录
+        checkService.deleteChecksByProjectId(id);
         return true;
     }
 
     @Override
     public Project getProject(Long id) {
        return projectMapper.selectById(id);
+    }
+
+    @Override
+    public Boolean deleteProjectByClienId(Long clientId) {
+        QueryWrapper<Project> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq(Project.CLIENT_ID,clientId);
+        Assert.isTrue(1<=projectMapper.delete(queryWrapper),"删除合同关联项目失败！");
+        return true;
     }
 }

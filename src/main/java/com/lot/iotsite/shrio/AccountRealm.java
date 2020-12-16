@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.service.UserService;
 import com.lot.iotsite.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -55,11 +56,11 @@ public class AccountRealm extends AuthorizingRealm {
     }
 
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+     public AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         System.out.println("进入登录认证");
         JwtToken jwtToken = (JwtToken) token;
-        String userId = jwtUtils.getClaimByToken((String) jwtToken.getPrincipal()).getSubject();
-        User user = userService.getById(Long.valueOf(userId));
+        Long userId = jwtUtils.getClaimByToken((String) jwtToken.getPrincipal()).get("userId",Long.class);
+        User user = userService.getById(userId);
         if(user == null){
             throw new UnknownAccountException("账户不存在");
         }

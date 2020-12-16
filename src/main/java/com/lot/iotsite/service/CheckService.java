@@ -17,4 +17,6 @@ public interface CheckService {
     ProjectCheckResult getProjectCheckResultByProjectId(Long projectId, int checkFlag);
 
     List<Long> getProjectIdListByUserId(Long userID);
+
+    public Boolean deleteChecksByProjectId(Long projectId);
 }

@@ -55,4 +55,6 @@ public interface ProjectService {
      * @return
      */
     public Project getProject(Long id);
+
+    public Boolean deleteProjectByClienId(Long clientId);
 }

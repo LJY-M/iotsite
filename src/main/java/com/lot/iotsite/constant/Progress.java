@@ -15,17 +15,18 @@ public enum Progress {
      public Integer code(){return code;}
      public String status(){return status;}
 
-     public static Integer getCode(String name){
+     public static Integer getCode(String status){
         for(Progress item:Progress.values()){
-            if(item.name().equals(name)){
+            if(item.status.equals(status)){
                 return item.code();
             }
+
         }
          return null;
      }
      public static String getStatus(Integer code){
         for(Progress item:Progress.values()){
-            if(item.name().equals(code)){
+            if(item.code.equals(code)){
                 return item.status();
             }
         }
