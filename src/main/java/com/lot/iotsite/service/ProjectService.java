@@ -33,14 +33,14 @@ public interface ProjectService {
      * @param project
      * @return
      */
-    public Boolean addProject(Project project,List<Long> fatherIds);
+    public Boolean addProject(Project project, List<Long> fatherIds);
 
     /**
      * 更新项目信息
      * @param project
      * @return
      */
-    public Boolean updateProject(Project project,List<Long> fatherIds);
+    public Boolean updateProject(Project project, List<Long> fatherIds);
 
     /**
      * 删除项目

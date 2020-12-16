@@ -134,6 +134,11 @@
             <artifactId>spring-cloud-openfeign-core</artifactId>
             <version>3.0.0-M5</version>
         </dependency>
+        <dependency>
+            <groupId>com.lot</groupId>
+            <artifactId>iotsite</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 	<build>

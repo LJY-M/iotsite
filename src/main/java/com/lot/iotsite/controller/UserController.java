@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.queryParam.UserParam;
 import com.lot.iotsite.service.UserService;
+import com.lot.iotsite.utils.AccountUtils;
 import com.lot.iotsite.utils.JwtUtils;
 import com.lot.iotsite.utils.Result;
 import org.apache.shiro.SecurityUtils;
@@ -14,22 +15,13 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-import com.lot.iotsite.utils.AccountUtils;
-
-/**
- * <p>
- * 用户表 前端控制器
- * </p>
- *
- * @author isHuangXin
- * @since 2020-12-04
- */
 @RestController
 @RequestMapping("/user")
 @CrossOrigin
@@ -45,7 +37,7 @@ public class UserController {
     AccountUtils accountUtils;
 
     @PostMapping("/login")
-    public Map<Object,Object> login(@RequestParam(value = "account") Long account,
+    public Map<Object,Object> login(@Validated @RequestParam(value = "account") Long account,
                                     @RequestParam(value = "password") String password,
                                     HttpServletResponse response) {
         User user = userService.getOne(new QueryWrapper<User>().eq("account", account));
