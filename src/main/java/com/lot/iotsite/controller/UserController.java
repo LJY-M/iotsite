@@ -7,6 +7,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.SimpleUserDto;
+import com.lot.iotsite.queryParam.LoginParam;
 import com.lot.iotsite.service.UserService;
 import com.lot.iotsite.utils.JwtUtils;
 import com.lot.iotsite.utils.Result;
@@ -16,15 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-<<<<<<< .mine
 import java.util.List;
 
 
-=======
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
->>>>>>> .theirs
 /**
  * <p>
  * 用户表 前端控制器
@@ -45,15 +44,15 @@ public class UserController {
     JwtUtils jwtUtils;
 
     @PostMapping("/login")
-    public Map<Object,Object> login(@RequestParam(value = "account") Long account,
-                                    @RequestParam(value = "password") String password,
+    public Map<Object,Object> login(@RequestBody LoginParam loginParam,
                                     HttpServletResponse response) {
-        User user = userService.getOne(new QueryWrapper<User>().eq("account", account));
+        User user = userService.getOne(new QueryWrapper<User>().eq("account", loginParam.getAccount()));
         Assert.notNull(user, "用户不存在");
-        if (!user.getPassword().equals(SecureUtil.md5(password))) {
+        if (!user.getPassword().equals(SecureUtil.md5(loginParam.getPassword()))) {
             System.out.println("密码错误");
             return null;
         }
+
         String jwt = jwtUtils.generateToken(user.getId(), user.getUserLimit());
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");

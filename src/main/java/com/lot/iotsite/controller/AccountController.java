@@ -35,7 +35,7 @@ public class AccountController {
         if(null==user) throw new BusinessException(ResultCode.USER_NOT_EXIST);
         if(!user.getPassword().equals(SecureUtil.md5(password)))
             throw new BusinessException(ResultCode.USER_PASSWORD_FAIL);
-        String jwt = jwtUtils.generateToken(user.getId());
+        String jwt = jwtUtils.generateToken(user.getId(),user.getUserLimit());
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
         // 用户可以另一个接口
