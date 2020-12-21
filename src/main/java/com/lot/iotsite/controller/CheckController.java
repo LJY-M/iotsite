@@ -49,6 +49,14 @@ public class CheckController {
         return projectCheckResult;
     }
 
+    @PostMapping("/check/analysis")
+    public ProjectCheckResult ProjectCheckResultAnalysis(
+            @RequestParam(value = "projectId", required = true) Long projectId){
+        ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 3);
+        ProjectCheckResult projectCheckResultAnalysis = checkService.resultsAnalysis(projectCheckResult);
+        return projectCheckResult;
+    }
+
     @PostMapping("/check/upload_result")
     public Boolean updateCheckResult(@SpringQueryMap CheckParam checkParam){
         Assert.notNull(checkParam.getId(),"Id不能为空！");
