@@ -49,7 +49,7 @@ public class CheckController {
         return projectCheckResult;
     }
 
-    @PostMapping("/check/update")
+    @PostMapping("/check/upload_result")
     public Boolean updateCheckResult(@SpringQueryMap CheckParam checkParam){
         Assert.notNull(checkParam.getId(),"Id不能为空！");
         Assert.notNull(checkParam.getProjectId(),"projectId不能为空！");
@@ -57,22 +57,31 @@ public class CheckController {
         Assert.notNull(checkParam.getUserId(),"userId不能为空！");
         Assert.notNull(checkParam.getCheckSystemId(),"checkSystemId不能为空！");
         Assert.notNull(checkParam.getGrade(),"grade不能为空！");
-        Assert.notNull(checkParam.getExamState(),"examState不能为空！");
-        Assert.notNull(checkParam.getPassState(),"passState不能为空！");
 
         Check check = new Check();
         BeanUtils.copyProperties(checkParam, check);
         check.setFinishDateTime(LocalDateTime.now());
 
+        check.setExamState(1);
+
         System.out.println(check.toString());
 
-        Boolean flag = checkService.updateCheckResult(check);
-//        if (flag.equals(true)){
-//            return " The update is successful : \n" + check.toString();
-//        }
-//
-//        return "Update failed";
+        Boolean flag = checkService.uploadCheckResult(check);
+
         return flag;
+    }
+
+    @PostMapping("/check/review_result")
+    public Integer reviewCheckResult(
+            @RequestParam(value = "checkId", required = true) Long checkId,
+            @RequestParam(value = "flag", required = true) Integer flag
+    ){
+        Assert.notNull(checkId,"checkId不能为空！");
+        Assert.notNull(flag,"flag不能为空！");
+
+        Integer reviewReturn = checkService.reviewCheckResult(checkId, flag);
+
+        return reviewReturn;
     }
 
     @PostMapping("/check/upload_picture")
@@ -98,6 +107,8 @@ public class CheckController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        String urlPath = "http://localhost:8080/iotsite/image/";
 
         Picture picture = new Picture();
         picture.setCheckId(checkId);

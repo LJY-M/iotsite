@@ -21,9 +21,5 @@ public class CheckParam {
 
     private String description;
 
-    private Integer examState;
-
-    private Integer passState;
-
     private LocalDateTime finishDateTime;
 }

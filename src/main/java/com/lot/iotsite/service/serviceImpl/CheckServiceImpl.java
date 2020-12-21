@@ -98,15 +98,20 @@ public class CheckServiceImpl implements CheckService {
                                 checkQueryWrapper.eq(Check.PROJECT_ID, projectId);
 
                                 if (checkFlag == 1){
-                                    checkQueryWrapper.eq(Check.EXAM_STATE, 0);
+                                    checkQueryWrapper.eq(Check.PASS_STATE, 0);
+                                    checkQueryWrapper.eq(Check.EXAM_STATE, 1);
                                 }
                                 if (checkFlag == 2){
-                                    checkQueryWrapper.and(
-                                            checkQueryWrapper1 ->
-                                                    checkQueryWrapper1.eq(Check.EXAM_STATE, 0)
-                                                            .or()
-                                                            .eq(Check.PASS_STATE, 0)
-                                    );
+//                                    checkQueryWrapper.and(
+//                                            checkQueryWrapper1 ->
+//                                                    checkQueryWrapper1.eq(Check.EXAM_STATE, 0)
+//                                                            .or()
+//                                                            .eq(Check.PASS_STATE, 0)
+//                                    );
+                                    checkQueryWrapper.eq(Check.PASS_STATE, 0);
+                                }
+                                if (checkFlag == 3){
+                                    checkQueryWrapper.eq(Check.PASS_STATE, 1);
                                 }
 
                                 //获取二级体系表对应的检查记录
@@ -209,11 +214,43 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public Boolean updateCheckResult(Check check) {
+    public Boolean uploadCheckResult(Check check) {
         Check check1 = getCheckById(check.getId());
         Assert.notNull(check1, "该检查结果不存在！");
+
+        Assert.isTrue(check1.getExamState() == 0, "审核前不能重复提交");
+
+        Assert.isTrue(check1.getPassState() == 0, "审核通过后不能提交");
+
         Assert.isTrue(1 == checkMapper.updateById(check), "检查结果更新失败！");
         return true;
+    }
+
+    @Override
+    public Integer reviewCheckResult(Long checkId, Integer flag) {
+        Check check = getCheckById(checkId);
+        Assert.notNull(check, "该检查结果不存在！");
+
+        Assert.isTrue(check.getExamState() == 1, "提交前不能审核");
+
+        Assert.isTrue(check.getPassState() == 0, "审核通过后不能提交");
+
+        Integer reviewReturn = -1;
+
+        if (flag == 0) {
+            check.setExamState(0);
+            reviewReturn = checkMapper.updateById(check);
+        }
+        else if(flag == 1) {
+            check.setPassState(1);
+            reviewReturn = checkMapper.updateById(check);
+        }
+        else {
+            Assert.notNull(null, "该标志不存在！");
+        }
+
+
+        return reviewReturn;
     }
 
     @Override
@@ -222,14 +259,14 @@ public class CheckServiceImpl implements CheckService {
        queryWrapper.eq(Check.PROJECT_ID,projectId);
        Assert.isTrue(1<=checkMapper.delete(queryWrapper),"删除项目检查结果失败！");
        // 删除检查图片
-        List<Check> checks=getChecksByrojectId(projectId);
+        List<Check> checks=getChecksByProjectId(projectId);
         for(Check item:checks){
             pictureService.deletePictureByCheckId(item.getId());
         }
        return true;
     }
 
-    private List<Check> getChecksByrojectId(Long projectId){
+    private List<Check> getChecksByProjectId(Long projectId){
         QueryWrapper<Check> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq(Check.PROJECT_ID,projectId);
         return checkMapper.selectList(queryWrapper);
