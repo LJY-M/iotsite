@@ -13,10 +13,12 @@ public interface CheckService {
 
 //    checkFlag = 0;    get project all check item
 //    checkFlag = 1;    get project not exam check item
-//    checkFlag = 2;    get project not passed check item
+//    checkFlag = 2;    get project not passed or not exam check item
     ProjectCheckResult getProjectCheckResultByProjectId(Long projectId, int checkFlag);
 
     List<Long> getProjectIdListByUserId(Long userID);
+
+    public Boolean updateCheckResult(Check check);
 
     public Boolean deleteChecksByProjectId(Long projectId);
 }

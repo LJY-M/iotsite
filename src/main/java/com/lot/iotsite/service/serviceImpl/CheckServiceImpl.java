@@ -209,6 +209,14 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
+    public Boolean updateCheckResult(Check check) {
+        Check check1 = getCheckById(check.getId());
+        Assert.notNull(check1, "该检查结果不存在！");
+        Assert.isTrue(1 == checkMapper.updateById(check), "检查结果更新失败！");
+        return true;
+    }
+
+    @Override
     public Boolean deleteChecksByProjectId(Long projectId) {
        QueryWrapper<Check> queryWrapper=new QueryWrapper<>();
        queryWrapper.eq(Check.PROJECT_ID,projectId);

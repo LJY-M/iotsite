@@ -22,4 +22,14 @@ public class PictureServiceImpl implements PictureService {
         Assert.isTrue(1<=pictureMapper.delete(queryWrapper),"删除检查图片失败！");
         return true;
     }
+
+    @Override
+    public int insertPicture(Picture picture) {
+        QueryWrapper<Picture> pictureQueryWrapper = new QueryWrapper<>();
+        pictureQueryWrapper.eq(Picture.URL, picture.getUrl());
+        Picture picture1 = pictureMapper.selectOne(pictureQueryWrapper);
+        Assert.isNull(picture1,"该图片已存在");
+        int flag = pictureMapper.insert(picture);
+        return flag;
+    }
 }
