@@ -12,14 +12,11 @@ import com.lot.iotsite.mapper.ContractMapper;
 import com.lot.iotsite.service.ContractService;
 import com.lot.iotsite.service.ProjectService;
 import com.lot.iotsite.service.UserService;
-import org.hibernate.validator.internal.util.Contracts;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
