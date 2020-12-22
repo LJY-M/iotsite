@@ -1,7 +1,6 @@
 package com.lot.iotsite.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.UserDto;
 import com.lot.iotsite.mapper.UserMapper;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
@@ -25,7 +24,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User getUserById(Long id) {
-       return userMapper.selectById(id);
+        return userMapper.selectById(id);
     }
 
     @Override
@@ -50,6 +49,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user1 = getUserById(user.getId());
         Assert.notNull(user1,"该用户不存在！");
         return true;
+    }
+
+    @Override
+    public User getOne(QueryWrapper<User> account){
+        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq(User.ACCOUNT, account);
+        User user = userMapper.selectOne(queryWrapper);
+        return user;
     }
 
     //员工信息管理部分

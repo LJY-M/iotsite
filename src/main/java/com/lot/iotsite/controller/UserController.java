@@ -3,7 +3,6 @@ package com.lot.iotsite.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.queryParam.UserParam;
 import com.lot.iotsite.service.UserService;
@@ -34,7 +33,9 @@ public class UserController {
     public Map<Object,Object> login(@Validated @RequestParam(value = "account") Long account,
                                     @RequestParam(value = "password") String password,
                                     HttpServletResponse response) {
-        User user = userService.getOne(new QueryWrapper<User>().eq("account", account));
+
+        //User user = userService.getOne(new QueryWrapper<User>().eq("account", account));
+        User user = userService.getUserByAccount(account);
         Assert.notNull(user, "用户不存在");
         if (!user.getPassword().equals(SecureUtil.md5(password))) {
             System.out.println("密码错误");

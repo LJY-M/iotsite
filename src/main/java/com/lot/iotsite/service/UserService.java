@@ -1,6 +1,6 @@
 package com.lot.iotsite.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.UserDto;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public interface UserService extends IService<User> {
+public interface UserService{
 
     User getUserById(Long id);
     User getUserByAccount(Long account);
@@ -22,4 +22,6 @@ public interface UserService extends IService<User> {
 
     // function_2: 删除员工
     Boolean delete(Long id);
+
+    User getOne(QueryWrapper<User> account);
 }
