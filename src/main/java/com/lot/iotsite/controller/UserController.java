@@ -5,6 +5,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.User;
+import com.lot.iotsite.dto.SimpleUserDto;
 import com.lot.iotsite.queryParam.UserParam;
 import com.lot.iotsite.service.UserService;
 import com.lot.iotsite.utils.AccountUtils;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -95,4 +97,8 @@ public class UserController {
 //        return Result.success(null);
 //    }
 
+    @GetMapping("/user")
+    public List<SimpleUserDto> getUsers(@RequestParam("name")String name){
+        return userService.getUserByName(name);
+    }
 }

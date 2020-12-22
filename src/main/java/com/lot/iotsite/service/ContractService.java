@@ -56,5 +56,5 @@ public interface ContractService {
 
      Contract getContractById(Long id);
 
-     List<SimpleContractDto> getAllContractName();
+     List<SimpleContractDto> getAllContractName(String clientName);
 }

@@ -24,9 +24,10 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<SimpleGroupDto> getGroupNames() {
+    public List<SimpleGroupDto> getGroupNames(String groupName) {
         QueryWrapper<Group> queryWrapper=new QueryWrapper<>();
-        queryWrapper.orderByAsc(Group.NAME);
+        queryWrapper.like(Group.NAME,groupName)
+                .orderByAsc(Group.NAME);
         List<Group> groups=groupMapper.selectList(queryWrapper);
         List<SimpleGroupDto> simpleGroupDtos=new ArrayList<>();
         for(Group item:groups){

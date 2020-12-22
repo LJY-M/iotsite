@@ -75,8 +75,8 @@ public class ProjectServiceImpl implements ProjectService {
        Assert.notNull(project,"项目不存在！");
        ProjectDto projectDto=new ProjectDto();
        BeanUtils.copyProperties(project,projectDto);
-       String progress= Progress.getStatus(project.getProgress());
-       projectDto.setStatus(progress);
+        String progress= Progress.getStatus(project.getProgress());
+        projectDto.setStatus(progress);
         // 将pm_id转换给pm_name;
         User user=userService.getUserById(project.getPmId());
         projectDto.setPmName(user.getName());
@@ -109,10 +109,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Boolean deleteProject(Long id) {
         Assert.isTrue(1==projectMapper.deleteById(id),"删除项目失败！");
-        //删除检查体系
-        projectToCheckSystemService.deleteProjectToCheckSystems(id);
         // 删除检查记录
         checkService.deleteChecksByProjectId(id);
+        //删除检查体系
+        projectToCheckSystemService.deleteProjectToCheckSystems(id);
         return true;
     }
 

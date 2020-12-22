@@ -39,7 +39,7 @@ public class ProjectToCheckSystemServiceImpl implements ProjectToCheckSystemServ
     public Boolean deleteProjectToCheckSystems(Long projectId) {
         QueryWrapper<ProjectToCheckSystem> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq(ProjectToCheckSystem.PROJECT_ID,projectId);
-        Assert.isTrue(1==projectToCheckSystemMapper.delete(queryWrapper),"移除项目检查体系失败！");
+        projectToCheckSystemMapper.delete(queryWrapper);
         return true;
     }
 

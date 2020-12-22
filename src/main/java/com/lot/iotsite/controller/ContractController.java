@@ -102,9 +102,9 @@ public class ContractController {
        return contractService.getContract(id);
     }
 
-   @GetMapping("/client_names")
-   public List<SimpleContractDto> getAllContractName(){
-       return  contractService.getAllContractName();
+   @GetMapping("/client")
+   public List<SimpleContractDto> getAllContractName(@RequestParam("name")String clientName){
+       return  contractService.getAllContractName(clientName);
    }
 
 }

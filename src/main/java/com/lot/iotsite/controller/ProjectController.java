@@ -70,11 +70,11 @@ public class ProjectController {
      * 更新项目信息
      * @return
      */
-    @PutMapping("/project/{id}")
+    @PutMapping("/{id}")
     public Boolean updateProject(@SpringQueryMap ProjectParam projectParam,@PathVariable("id") Long id){
         Project project=new Project();
         Project project1=projectService.getProject(id);
-        Assert.isTrue(project1.getProgress().equals(Progress.FINISH.code()),"该项目已完成，无法再修改项目信息！");
+        Assert.isTrue(!project1.getProgress().equals(Progress.FINISH.code()),"该项目已完成，无法再修改项目信息！");
         BeanUtils.copyProperties(projectParam,project);
         List<Long> fatherIds=projectParam.getCheckSystems();
         project.setId(id);
@@ -91,5 +91,6 @@ public class ProjectController {
     public Boolean deleteProject(@PathVariable("id") Long id){
         return projectService.deleteProject(id);
     }
+
 
 }

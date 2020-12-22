@@ -105,9 +105,10 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public List<SimpleContractDto> getAllContractName() {
+    public List<SimpleContractDto> getAllContractName(String clientName) {
         QueryWrapper<Contract> queryWrapper=new QueryWrapper<>();
-        queryWrapper.orderByDesc(Contract.CLIENT_NAME);
+        queryWrapper.like(Contract.CLIENT_NAME,clientName)
+                    .orderByAsc(Contract.CLIENT_NAME);
         List<Contract> contracts=contractMapper.selectList(queryWrapper);
         List<SimpleContractDto> simpleContractDtos=new ArrayList<>();
        for(Contract item:contracts){

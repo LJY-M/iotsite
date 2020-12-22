@@ -212,7 +212,7 @@ public class CheckServiceImpl implements CheckService {
     public Boolean deleteChecksByProjectId(Long projectId) {
        QueryWrapper<Check> queryWrapper=new QueryWrapper<>();
        queryWrapper.eq(Check.PROJECT_ID,projectId);
-       Assert.isTrue(1<=checkMapper.delete(queryWrapper),"删除项目检查结果失败！");
+       checkMapper.delete(queryWrapper);
        // 删除检查图片
         List<Check> checks=getChecksByrojectId(projectId);
         for(Check item:checks){

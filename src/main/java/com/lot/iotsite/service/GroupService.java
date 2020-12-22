@@ -9,5 +9,5 @@ import java.util.List;
 @Service
 public interface GroupService {
     Group getGroupById(Long id);
-    List<SimpleGroupDto> getGroupNames();
+    List<SimpleGroupDto> getGroupNames(String groupName);
 }
