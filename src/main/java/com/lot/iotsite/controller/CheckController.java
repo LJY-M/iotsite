@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -47,6 +48,14 @@ public class CheckController {
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 2);
         return projectCheckResult;
+    }
+
+    @PostMapping("/check/get_check_list")
+    public List<Check> getCheckItemByGroupIdAndIdentity(
+            @RequestParam(value = "groupId", required = true) Long groupId,
+            @RequestParam(value = "identity", required = true) Long identity){
+        List<Check> checkList = checkService.getCheckItemByGroupId(groupId, identity);
+        return checkList;
     }
 
     @PostMapping("/check/analysis")
