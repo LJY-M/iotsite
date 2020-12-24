@@ -8,6 +8,7 @@ import com.lot.iotsite.queryParam.UserParam;
 import com.lot.iotsite.service.UserService;
 import com.lot.iotsite.utils.AccountUtils;
 import com.lot.iotsite.utils.JwtUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -29,11 +30,15 @@ public class UserController {
     @Autowired
     AccountUtils accountUtils;
 
+    @PostMapping("/test")
+    public void test(){
+        System.out.println("检测是否进入UserController");
+    }
+
     @PostMapping("/login")
     public Map<Object,Object> login(@Validated @RequestParam(value = "account") Long account,
                                     @RequestParam(value = "password") String password,
                                     HttpServletResponse response) {
-
         //User user = userService.getOne(new QueryWrapper<User>().eq("account", account));
         User user = userService.getUserByAccount(account);
         Assert.notNull(user, "用户不存在");
@@ -49,8 +54,17 @@ public class UserController {
                 .put("id", user.getId())
                 .put("account", user.getAccount())
                 .put("name", user.getName())
+                .put("sex", user.getSex())
+                .put("user_limit", user.getUserLimit())
+                .put("major", user.getMajor())
+                .put("academic", user.getAcademic())
+                .put("native_place", user.getNativePlace())
+                .put("address", user.getAddress())
+                .put("tellphone", user.getTelephone())
+                .put("job", user.getJob())
                 .map();
     }
+
 
     @PostMapping("/register")
     public boolean register(@SpringQueryMap @RequestBody UserParam userParam,
@@ -65,29 +79,52 @@ public class UserController {
         return userService.save(user);
     }
 
-//
-//    // RequiresAuthentication保证只有用户登录成功后才能进入此界面
 //    @RequiresAuthentication
-//    @PostMapping("/index")
-//    public boolean index(@SpringQueryMap @RequestBody UserParam userParam,
-//                         HttpServletResponse response,
-//                         HttpServletRequest request) throws Exception {
-//        Long userID = AccountUtils.getCurrentUser(request);
-//        // 登录系统进入个人信息界面后会在信息栏显示个人信息
-//        User user = userService.getUserById(userID);
-//
-//
-//        // 将个人信息页修改的参数加入到userParam中，然后拷贝到user再进行用户信息更新
-//        BeanUtils.copyProperties(userParam,user);
-//
-//        return userService.update(user);
-//    }
-//
-//    @RequiresAuthentication
-//    @GetMapping("/logout")
-//    public Result logout() {
-//        SecurityUtils.getSubject().logout();
-//        return Result.success(null);
-//    }
+    @GetMapping("/logout")
+    public boolean logout() {
+        SecurityUtils.getSubject().logout();
+        return true;
+    }
 
+    //RequiresAuthentication保证只有用户登录成功后才能进入此界面
+    //@RequiresAuthentication
+    @PostMapping("/index/{id}")
+    public Map<Object,Object> index(@PathVariable("id") Long id) {
+        User user = userService.getUserById(id);
+        return MapUtil.builder()
+                .put("id", user.getId())
+                .put("account", user.getAccount())
+                .put("name", user.getName())
+                .put("sex", user.getSex())
+                .put("user_limit", user.getUserLimit())
+                .put("major", user.getMajor())
+                .put("academic", user.getAcademic())
+                .put("native_place", user.getNativePlace())
+                .put("address", user.getAddress())
+                .put("tellphone", user.getTelephone())
+                .put("job", user.getJob())
+                .map();
+    }
+
+    @PostMapping("/update_user/{id}")
+    public Boolean updateUserById(@PathVariable("id") Long id,
+                                  @SpringQueryMap @RequestBody UserParam userParam){
+        /**可以更改的用户信息：
+         *     private Long account;
+         *     private String name;
+         *     private String password;
+         *     private String sex;
+         *     private Integer userLimit;
+         *     private String major;
+         *     private String academic;
+         *     private String nativePlace;
+         *     private String address;
+         *     private Integer telephone;
+         *     private String job;
+         */
+        User user = userService.getUserById(id);
+        userParam.setPassword(SecureUtil.md5(userParam.getPassword()));
+        BeanUtils.copyProperties(userParam,user);
+        return userService.update(user);
+    }
 }
