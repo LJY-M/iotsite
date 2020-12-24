@@ -3,9 +3,11 @@ package com.lot.iotsite.service.serviceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.Contract;
 import com.lot.iotsite.domain.Group;
+import com.lot.iotsite.domain.UserGroup;
 import com.lot.iotsite.dto.SimpleContractDto;
 import com.lot.iotsite.dto.SimpleGroupDto;
 import com.lot.iotsite.mapper.GroupMapper;
+import com.lot.iotsite.mapper.UserGroupMapper;
 import com.lot.iotsite.service.GroupService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,10 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
     @Autowired
     private GroupMapper groupMapper;
+
+    @Autowired
+    private UserGroupMapper userGroupMapper;
+
     @Override
     public Group getGroupById(Long id) {
        return groupMapper.selectById(id);
@@ -36,5 +42,12 @@ public class GroupServiceImpl implements GroupService {
             simpleGroupDtos.add(simpleGroupDto);
         }
         return simpleGroupDtos;
+    }
+
+    @Override
+    public List<UserGroup> getGroupByUser(Long userId) {
+       QueryWrapper<UserGroup> queryWrapper=new QueryWrapper<>();
+       queryWrapper.eq(UserGroup.USER_ID,userId);
+        return userGroupMapper.selectList(queryWrapper);
     }
 }

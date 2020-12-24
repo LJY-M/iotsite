@@ -2,11 +2,12 @@ package com.lot.iotsite.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.lot.iotsite.baseClass.BaseEntity;
 import lombok.Data;
 
 @Data
 @TableName("t_picture")
-public class Picture {
+public class Picture extends BaseEntity {
 
     @TableField("check_id")
     private Long checkId;

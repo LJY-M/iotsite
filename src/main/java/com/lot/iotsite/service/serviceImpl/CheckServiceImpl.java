@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
 
 @Service
@@ -98,15 +99,20 @@ public class CheckServiceImpl implements CheckService {
                                 checkQueryWrapper.eq(Check.PROJECT_ID, projectId);
 
                                 if (checkFlag == 1){
-                                    checkQueryWrapper.eq(Check.EXAM_STATE, 0);
+                                    checkQueryWrapper.eq(Check.PASS_STATE, 0);
+                                    checkQueryWrapper.eq(Check.EXAM_STATE, 1);
                                 }
                                 if (checkFlag == 2){
-                                    checkQueryWrapper.and(
-                                            checkQueryWrapper1 ->
-                                                    checkQueryWrapper1.eq(Check.EXAM_STATE, 0)
-                                                            .or()
-                                                            .eq(Check.PASS_STATE, 0)
-                                    );
+//                                    checkQueryWrapper.and(
+//                                            checkQueryWrapper1 ->
+//                                                    checkQueryWrapper1.eq(Check.EXAM_STATE, 0)
+//                                                            .or()
+//                                                            .eq(Check.PASS_STATE, 0)
+//                                    );
+                                    checkQueryWrapper.eq(Check.PASS_STATE, 0);
+                                }
+                                if (checkFlag == 3){
+                                    checkQueryWrapper.eq(Check.PASS_STATE, 1);
                                 }
 
                                 //获取二级体系表对应的检查记录
@@ -209,19 +215,140 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
+    public Boolean uploadCheckResult(Check check) {
+        Check check1 = getCheckById(check.getId());
+        Assert.notNull(check1, "该检查结果不存在！");
+
+        Assert.isTrue(check1.getExamState() == 0, "审核前不能重复提交");
+
+        Assert.isTrue(check1.getPassState() == 0, "审核通过后不能提交");
+
+        Assert.isTrue(1 == checkMapper.updateById(check), "检查结果更新失败！");
+        return true;
+    }
+
+    @Override
+    public Integer reviewCheckResult(Long checkId, Integer flag) {
+        Check check = getCheckById(checkId);
+        Assert.notNull(check, "该检查结果不存在！");
+
+        Assert.isTrue(check.getExamState() == 1, "提交前不能审核");
+
+        Assert.isTrue(check.getPassState() == 0, "审核通过后不能提交");
+
+        Integer reviewReturn = -1;
+
+        if (flag == 0) {
+            check.setExamState(0);
+            reviewReturn = checkMapper.updateById(check);
+        }
+        else if(flag == 1) {
+            check.setPassState(1);
+            reviewReturn = checkMapper.updateById(check);
+        }
+        else {
+            Assert.notNull(null, "该标志不存在！");
+        }
+
+
+        return reviewReturn;
+    }
+
+    @Override
+    public ProjectCheckResult resultsAnalysis(ProjectCheckResult projectCheckResult) {
+
+        Integer secondCheckSystemNum = 0;
+        Integer checkNum = 0;
+
+        List<PrimaryCheckSystem> primaryCheckSystemList = projectCheckResult.getPrimaryCheckSystemList();
+
+        int k = 0;
+        double primaryWeight[] = new double[10];
+        double primarySumWeight = 0;
+        double primarySum = 0;
+
+        for ( k = 0; k < primaryCheckSystemList.size(); k++){
+            primaryWeight[k] = primaryCheckSystemList.get(k).getCheckSystem().getWeight();
+            primarySumWeight += primaryWeight[k];
+        }
+
+        for (k = 0; k < primaryCheckSystemList.size(); k++){
+
+            //获取一级检查体系
+            CheckSystem checkSystem = primaryCheckSystemList.get(k).getCheckSystem();
+
+            double primarySumGrade = 0;
+            primaryWeight[k] = primaryWeight[k] / primarySumWeight;
+
+            List<SecondaryCheckSystem> secondaryCheckSystemList =
+                    primaryCheckSystemList.get(k).getSecondaryCheckSystemList();
+
+
+            int j = 0;
+            double secondWeight[] = new double[10];
+            double secondSumWeight = 0;
+            double secondSum = 0;
+
+            for ( j = 0; j < secondaryCheckSystemList.size(); j++){
+                secondWeight[j] = secondaryCheckSystemList.get(j).getCheckSystem().getWeight();
+                secondSumWeight += secondWeight[j];
+                secondCheckSystemNum ++;
+            }
+
+            for ( j = 0; j < secondaryCheckSystemList.size(); j++){
+
+                CheckSystem checkSystem1 = secondaryCheckSystemList.get(j).getCheckSystem();
+
+                double secondSumGrade = 0;
+                secondWeight[j] = secondWeight[j] / secondSumWeight;
+
+                List<CheckResult> checkResultList = secondaryCheckSystemList.get(j).getCheckResultList();
+
+
+
+                for (int i = 0; i < checkResultList.size(); i++){
+
+                    Check check = checkResultList.get(i).getCheck();
+                    Integer checkGrade = check.getGrade();
+                    secondSumGrade = checkGrade * secondWeight[j];
+
+                    checkNum++;
+
+                    secondaryCheckSystemList.get(j).setGrade(secondSumGrade);
+                }
+
+                secondSum = secondSum + secondSumGrade;
+
+            }
+            primaryCheckSystemList.get(k).setGrade(secondSum);
+
+            primarySumGrade = secondSum * primaryWeight[k];
+
+            primarySum = primarySum + primarySumGrade;
+
+        }
+        projectCheckResult.setGrade(primarySum);
+
+        System.out.println(" 测试项目是否完成 " + secondCheckSystemNum + " : " + checkNum);
+
+        return projectCheckResult;
+
+    }
+
+    @Override
     public Boolean deleteChecksByProjectId(Long projectId) {
        QueryWrapper<Check> queryWrapper=new QueryWrapper<>();
        queryWrapper.eq(Check.PROJECT_ID,projectId);
        checkMapper.delete(queryWrapper);
        // 删除检查图片
-        List<Check> checks=getChecksByrojectId(projectId);
+        List<Check> checks=getChecksByProjectId(projectId);
         for(Check item:checks){
             pictureService.deletePictureByCheckId(item.getId());
         }
        return true;
     }
 
-    private List<Check> getChecksByrojectId(Long projectId){
+    private List<Check> getChecksByProjectId(Long projectId){
         QueryWrapper<Check> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq(Check.PROJECT_ID,projectId);
         return checkMapper.selectList(queryWrapper);

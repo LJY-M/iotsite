@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.constant.Progress;
 import com.lot.iotsite.domain.Contract;
 import com.lot.iotsite.domain.User;
+import com.lot.iotsite.dto.ContractAllDto;
 import com.lot.iotsite.dto.ContractDto;
 import com.lot.iotsite.dto.ContractsDto;
 import com.lot.iotsite.dto.SimpleContractDto;
@@ -105,6 +106,12 @@ public class ContractController {
    @GetMapping("/client")
    public List<SimpleContractDto> getAllContractName(@RequestParam("name")String clientName){
        return  contractService.getAllContractName(clientName);
+   }
+
+   @GetMapping("/contract_all")
+    public List<ContractAllDto> getContractWithProject(HttpServletRequest request){
+       Long userId=AccountUtils.getCurrentUser(request);
+       return contractService.getUserContracts(userId);
    }
 
 }

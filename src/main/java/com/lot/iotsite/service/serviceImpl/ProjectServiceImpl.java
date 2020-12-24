@@ -128,4 +128,11 @@ public class ProjectServiceImpl implements ProjectService {
         Assert.isTrue(1<=projectMapper.delete(queryWrapper),"删除合同关联项目失败！");
         return true;
     }
+
+    @Override
+    public Project getUserProject(Long groupId) {
+       QueryWrapper<Project> queryWrapper=new QueryWrapper<>();
+       queryWrapper.eq(Project.GROUP_ID,groupId);
+       return projectMapper.selectOne(queryWrapper);
+    }
 }

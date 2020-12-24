@@ -5,25 +5,22 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.constant.Progress;
 import com.lot.iotsite.domain.Contract;
-import com.lot.iotsite.dto.ContractDto;
-import com.lot.iotsite.dto.ContractsDto;
-import com.lot.iotsite.dto.SimpleContractDto;
+import com.lot.iotsite.domain.Project;
+import com.lot.iotsite.domain.UserGroup;
+import com.lot.iotsite.dto.*;
 import com.lot.iotsite.mapper.ContractMapper;
-import com.lot.iotsite.service.ContractService;
-import com.lot.iotsite.service.ProjectService;
-import com.lot.iotsite.service.UserService;
-import org.hibernate.validator.internal.util.Contracts;
+import com.lot.iotsite.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ContractServiceImpl implements ContractService {
@@ -36,6 +33,12 @@ public class ContractServiceImpl implements ContractService {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private GroupService groupService;
+
+    @Autowired
+    private ProjectToCheckSystemService projectToCheckSystemService;
 
     @Override
     public Boolean addContract(Contract contract) {
@@ -117,5 +120,45 @@ public class ContractServiceImpl implements ContractService {
            simpleContractDtos.add(simpleContractDto);
        }
        return simpleContractDtos;
+    }
+
+    @Override
+    public List<ContractAllDto> getUserContracts(Long userId) {
+        List<ContractAllDto> contractAllDtos=new ArrayList<>();
+        List<UserGroup> userGroups=groupService.getGroupByUser(userId);
+        List<Project> projects=new ArrayList<>();
+        for(UserGroup group:userGroups){
+            projects.add(projectService.getUserProject(group.getGroupId()));
+        }
+
+        List<ProjectAllDto> projectAllDtos=new ArrayList<>();
+        Set<Contract> contracts=new HashSet<>();
+        for(Project project:projects){
+            contracts.add(getContractByProject(project));
+            ProjectAllDto projectAllDto=new ProjectAllDto();
+            projectAllDto.setProjectId(project.getId());
+            projectAllDto.setProjectName(project.getName());
+            projectAllDto.setClientId(project.getClientId());
+            projectAllDto.setCheckSystems(projectToCheckSystemService.getCheckSystemNameByProject(project.getId()));
+            projectAllDtos.add(projectAllDto);
+        }
+        for(Contract contract:contracts){
+            ContractAllDto contractAllDto=new ContractAllDto();
+            contractAllDto.setClientId(contract.getId());
+            contractAllDto.setClientName(contract.getClientName());
+            List<ProjectAllDto> projectAllDtoList=new ArrayList<>();
+            for(ProjectAllDto projectAllDto:projectAllDtos){
+                if(projectAllDto.getClientId()==contract.getId()){
+                    projectAllDtoList.add(projectAllDto);
+                }
+            }
+            contractAllDto.setProjects(projectAllDtoList);
+            contractAllDtos.add(contractAllDto);
+        }
+        return contractAllDtos;
+    }
+
+    private Contract getContractByProject(Project project){
+        return contractMapper.selectById(project.getClientId());
     }
 }

@@ -3,6 +3,7 @@ package com.lot.iotsite.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.domain.Contract;
+import com.lot.iotsite.dto.ContractAllDto;
 import com.lot.iotsite.dto.ContractDto;
 import com.lot.iotsite.dto.ContractsDto;
 import com.lot.iotsite.dto.SimpleContractDto;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public interface ContractService {
@@ -57,4 +59,6 @@ public interface ContractService {
      Contract getContractById(Long id);
 
      List<SimpleContractDto> getAllContractName(String clientName);
+
+     List<ContractAllDto> getUserContracts(Long userId);
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.SimpleUserDto;
+import com.lot.iotsite.dto.UserDto;
 import com.lot.iotsite.mapper.UserMapper;
 import com.lot.iotsite.service.UserService;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +20,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public User getUserById(Long id) {
@@ -45,7 +49,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean update(User user){
         User user1 = getUserById(user.getId());
-        Assert.notNull(user1,"该y不存在！");
+        Assert.notNull(user1,"该用户不存在！");
+        return true;
+    }
+
+    //员工信息管理部分
+    // function_1: 员工信息显示
+    @Override
+    public List<UserDto> getAllUser(){
+        List<UserDto> userDtos = new ArrayList<>();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc(User.ID);
+        List<User> Users = userMapper.selectList(queryWrapper);
+        for (User person:Users){
+            UserDto userDto = new UserDto();
+            BeanUtils.copyProperties(person, userDto);
+            userDtos.add(userDto);
+        }
+        return userDtos;
+    }
+
+    // function_2: 删除员工
+    @Override
+    public Boolean delete(Long id){
+        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq(User.ID, id);
+        Assert.isTrue(1==userMapper.delete(queryWrapper),"用户删除失败！");
         return true;
     }
 
