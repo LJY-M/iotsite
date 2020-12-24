@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserMapper userMapper;
@@ -34,29 +34,21 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectOne(queryWrapper);
     }
 
+//    @Override
+//    public User getOne(QueryWrapper<User> account){
+//        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+//        queryWrapper.eq(User.ID, account.getEntity().getId());
+//        return userMapper.selectById(account.getEntity().getId());
+//    }
+
     @Override
-    public boolean save(User user){
+    public Boolean save(User user){
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq(User.ACCOUNT,user.getAccount());
         User is_user = userMapper.selectOne(queryWrapper);
         Assert.isNull(is_user,"该用户已存在！");
         userMapper.insert(user);
         return true;
-    }
-
-    @Override
-    public boolean update(User user){
-        User user1 = getUserById(user.getId());
-        Assert.notNull(user1,"该用户不存在！");
-        return true;
-    }
-
-    @Override
-    public User getOne(QueryWrapper<User> account){
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq(User.ACCOUNT, account);
-        User user = userMapper.selectOne(queryWrapper);
-        return user;
     }
 
     //员工信息管理部分
@@ -80,7 +72,14 @@ public class UserServiceImpl implements UserService {
     public Boolean delete(Long id){
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq(User.ID, id);
-        Assert.isTrue(1==userMapper.delete(queryWrapper),"用户删除失败！");
+        Assert.isTrue(1 == userMapper.delete(queryWrapper),"用户删除失败！");
+        return true;
+    }
+
+    // function_3: 用户信息修改包括权限设置
+    @Override
+    public Boolean update(User user){
+        Assert.isTrue(1 == userMapper.updateById(user), "用户更新失败！");
         return true;
     }
 }

@@ -60,12 +60,6 @@ public class UserController {
         org.springframework.util.Assert.notNull(userParam.getPassword(),"用户密码不能为空！");
         // 对密码进行md5加密
         userParam.setPassword(SecureUtil.md5(userParam.getPassword()));
-        // 输出检查
-        System.out.println("=========================");
-        System.out.println("用户账号" + userParam.getAccount());
-        System.out.println("用户姓名" + userParam.getName());
-        System.out.println("用户密码" + userParam.getPassword());
-        System.out.println("=========================");
         User user = new User();
         BeanUtils.copyProperties(userParam,user);
         return userService.save(user);
