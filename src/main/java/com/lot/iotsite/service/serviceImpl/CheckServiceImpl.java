@@ -195,6 +195,27 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
+    public List<Check> getCheckItemByGroupId(Long groupId, Long checkFlag) {
+
+        QueryWrapper<Check> checkQueryWrapper = new QueryWrapper<>();
+        checkQueryWrapper.eq(Check.GROUP_ID, groupId);
+
+
+        if (checkFlag == 1){
+            checkQueryWrapper.eq(Check.PASS_STATE, 0);
+            checkQueryWrapper.eq(Check.EXAM_STATE, 1);
+        }
+        if (checkFlag == 2){
+
+            checkQueryWrapper.eq(Check.PASS_STATE, 0);
+        }
+
+        List<Check> checkList = checkMapper.selectList(checkQueryWrapper);
+
+        return checkList;
+    }
+
+    @Override
     public List<Long> getProjectIdListByUserId(Long userID) {
 
         //判断user是否为组长

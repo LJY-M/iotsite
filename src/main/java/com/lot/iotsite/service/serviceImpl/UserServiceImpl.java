@@ -1,7 +1,6 @@
 package com.lot.iotsite.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.SimpleUserDto;
 import com.lot.iotsite.dto.UserDto;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserMapper userMapper;
@@ -26,7 +25,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User getUserById(Long id) {
-       return userMapper.selectById(id);
+        return userMapper.selectById(id);
     }
 
     @Override
@@ -36,20 +35,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.selectOne(queryWrapper);
     }
 
+//    @Override
+//    public User getOne(QueryWrapper<User> account){
+//        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+//        queryWrapper.eq(User.ID, account.getEntity().getId());
+//        return userMapper.selectById(account.getEntity().getId());
+//    }
+
     @Override
-    public boolean save(User user){
+    public Boolean save(User user){
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq(User.ACCOUNT,user.getAccount());
         User is_user = userMapper.selectOne(queryWrapper);
         Assert.isNull(is_user,"该用户已存在！");
         userMapper.insert(user);
-        return true;
-    }
-
-    @Override
-    public boolean update(User user){
-        User user1 = getUserById(user.getId());
-        Assert.notNull(user1,"该用户不存在！");
         return true;
     }
 
@@ -74,7 +73,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public Boolean delete(Long id){
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq(User.ID, id);
-        Assert.isTrue(1==userMapper.delete(queryWrapper),"用户删除失败！");
+        Assert.isTrue(1 == userMapper.delete(queryWrapper),"用户删除失败！");
+        return true;
+    }
+
+    // function_3: 用户信息修改包括权限设置
+    @Override
+    public Boolean update(User user){
+        Assert.isTrue(1 == userMapper.updateById(user), "用户更新失败！");
         return true;
     }
 

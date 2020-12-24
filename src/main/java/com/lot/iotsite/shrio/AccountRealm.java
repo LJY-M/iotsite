@@ -4,27 +4,21 @@ import cn.hutool.core.bean.BeanUtil;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.service.UserService;
 import com.lot.iotsite.utils.JwtUtils;
-import io.jsonwebtoken.Claims;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 @Component
 public class AccountRealm extends AuthorizingRealm {
 
     @Autowired
-    JwtUtils jwtUtils;
+    private JwtUtils jwtUtils;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Override
     public boolean supports(AuthenticationToken token){
@@ -60,7 +54,7 @@ public class AccountRealm extends AuthorizingRealm {
         System.out.println("进入登录认证");
         JwtToken jwtToken = (JwtToken) token;
         Long userId = jwtUtils.getClaimByToken((String) jwtToken.getPrincipal()).get("userId",Long.class);
-        User user = userService.getById(userId);
+        User user = userService.getUserById(userId);
         if(user == null){
             throw new UnknownAccountException("账户不存在");
         }
