@@ -2,6 +2,7 @@ package com.lot.iotsite.service;
 
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.ProjectCheckResult;
+import com.lot.iotsite.dto.UserGroupCheckDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,13 +19,13 @@ public interface CheckService {
     ProjectCheckResult getProjectCheckResultByProjectId(Long projectId, int checkFlag);
 
 //    checkFlag = 0;    get project all check item
-//    checkFlag = 1;    get project not reviewed check item (leader)
-//    checkFlag = 2;    get project not passed check item (member)
-    List<Check> getCheckItemByGroupId(Long groupId, Long checkFlag);
+//    checkFlag = 1;    get project not passed check item (member)
+//    checkFlag = 2;    get project not reviewed check item (leader)
+    List<Check> getCheckItemByGroupId(Long groupId, Integer checkFlag);
 
     ProjectCheckResult resultsAnalysis(ProjectCheckResult projectCheckResult);
 
-    List<Long> getProjectIdListByUserId(Long userID);
+    List<UserGroupCheckDto> getCheckListByUserId(Long userID);
 
     public Boolean uploadCheckResult(Check check);
 

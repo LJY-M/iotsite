@@ -2,13 +2,12 @@ package com.lot.iotsite.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.*;
+import com.lot.iotsite.dto.UserGroupCheckDto;
+import com.lot.iotsite.dto.UserGroupDto;
 import com.lot.iotsite.mapper.CheckMapper;
 import com.lot.iotsite.mapper.PictureMapper;
 import com.lot.iotsite.mapper.ProjectMapper;
-import com.lot.iotsite.service.CheckService;
-import com.lot.iotsite.service.CheckSystemService;
-import com.lot.iotsite.service.PictureService;
-import com.lot.iotsite.service.ProjectToCheckSystemService;
+import com.lot.iotsite.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -37,6 +36,9 @@ public class CheckServiceImpl implements CheckService {
 
     @Autowired
     private PictureService pictureService;
+
+    @Autowired
+    private GroupService groupService;
 
     @Override
     public Check getCheckById(Long id) {
@@ -195,17 +197,17 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public List<Check> getCheckItemByGroupId(Long groupId, Long checkFlag) {
+    public List<Check> getCheckItemByGroupId(Long groupId, Integer checkFlag) {
 
         QueryWrapper<Check> checkQueryWrapper = new QueryWrapper<>();
         checkQueryWrapper.eq(Check.GROUP_ID, groupId);
 
 
-        if (checkFlag == 1){
+        if (checkFlag == 2){
             checkQueryWrapper.eq(Check.PASS_STATE, 0);
             checkQueryWrapper.eq(Check.EXAM_STATE, 1);
         }
-        if (checkFlag == 2){
+        if (checkFlag == 1){
 
             checkQueryWrapper.eq(Check.PASS_STATE, 0);
         }
@@ -216,23 +218,29 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public List<Long> getProjectIdListByUserId(Long userID) {
-
-        //判断user是否为组长
-
-        List<Long> projectId = new ArrayList<>();
-
-        QueryWrapper<Check> checkQueryWrapper = new QueryWrapper<>();
-
-        checkQueryWrapper.eq(Check.USER_ID, userID);
+    public List<UserGroupCheckDto> getCheckListByUserId(Long userID) {
 
         //查询user所在group
+        List<UserGroup> userGroupList = groupService.getGroupByUser(userID);
 
-        //是组长
+        List<UserGroupCheckDto> userGroupCheckDtoList = new ArrayList<>();
 
-        //不是组长
+        for (int i = 0; i < userGroupList.size(); i++){
 
-        return null;
+            UserGroupCheckDto userGroupCheckDto = new UserGroupCheckDto();
+
+            UserGroup userGroup = userGroupList.get(i);
+
+            List<Check> checkList = getCheckItemByGroupId(userGroup.getGroupId(),
+                    userGroup.getIsLeader() + 1);
+
+            userGroupCheckDto.setUserGroup(userGroup);
+            userGroupCheckDto.setCheckList(checkList);
+
+            userGroupCheckDtoList.add(userGroupCheckDto);
+        }
+
+        return userGroupCheckDtoList;
     }
 
     @Override
