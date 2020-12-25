@@ -3,6 +3,7 @@ package com.lot.iotsite.controller;
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.Picture;
 import com.lot.iotsite.domain.ProjectCheckResult;
+import com.lot.iotsite.dto.CheckItemDto;
 import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
 import com.lot.iotsite.queryParam.CheckParam;
@@ -157,5 +158,13 @@ public class CheckController {
         int flag =  pictureService.insertPicture(picture);
 
         return flag;
+    }
+
+    @PostMapping("/check/get_check_item")
+    public CheckItemDto getCheckItemByCheckId(
+            @RequestParam(value = "checkId", required = true) Long checkId){
+        CheckItemDto checkItemDto = new CheckItemDto();
+        checkItemDto = checkService.getCheckItemByCheckId(checkId);
+        return checkItemDto;
     }
 }
