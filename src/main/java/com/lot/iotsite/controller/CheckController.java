@@ -31,24 +31,31 @@ public class CheckController {
     @Autowired
     private PictureService pictureService;
 
-    @PostMapping("/check")
-    public ProjectCheckResult getProjectResult(
+    @PostMapping("/check/get_project_all_check")
+    public ProjectCheckResult getProjectAllCheck(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 0);
         return projectCheckResult;
     }
 
-    @PostMapping("/check2")
-    public ProjectCheckResult getProjectResult2(
+    @PostMapping("/check/get_project_not_review_check")
+    public ProjectCheckResult getProjectNotReviewCheck(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 1);
         return projectCheckResult;
     }
 
-    @PostMapping("/check3")
-    public ProjectCheckResult getProjectResult3(
+    @PostMapping("/check/get_project_not_pass_check")
+    public ProjectCheckResult getProjectNotPassCheck(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 2);
+        return projectCheckResult;
+    }
+
+    @PostMapping("/check/get_project_pass_check")
+    public ProjectCheckResult getProjectPassCheck(
+            @RequestParam(value = "projectId", required = true) Long projectId){
+        ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 3);
         return projectCheckResult;
     }
 
