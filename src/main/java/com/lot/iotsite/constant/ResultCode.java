@@ -14,6 +14,7 @@ public enum ResultCode {
     USER_PASSWORD_FAIL(2005, "密码错误"),
     USER_HAS_EXISTED(2006, "用户已存在"),
     USER_LOGIN_FAIL(2007,"登录失败"),
+    USER_LOGIN_OVER_TIME(2008,"登录过期，请重新登录"),
 
     /* 系统错误：3001- 3999*/
     SYSTEM_INNER_ERROR(3001, "系统繁忙，请稍后重试"),

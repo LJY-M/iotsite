@@ -54,7 +54,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public Boolean deleteContractById(Long id) {
-        Assert.isTrue(1==contractMapper.deleteById(id),"删除合同失败！");
+       contractMapper.deleteById(id);
         //删除关联项目
         projectService.deleteProjectByClienId(id);
         return true;

@@ -2,6 +2,8 @@ package com.lot.iotsite.shrio;
 
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.lot.iotsite.constant.ResultCode;
+import com.lot.iotsite.exception.BusinessException;
 import com.lot.iotsite.utils.JwtUtils;
 import com.lot.iotsite.utils.Result;
 import io.jsonwebtoken.Claims;
@@ -45,7 +47,7 @@ public class JwtFilter extends AuthenticatingFilter {
         }else{
             Claims claim = jwtUtils.getClaimByToken(jwt);
             if(claim == null || jwtUtils.isTokenExpired(claim.getExpiration())){
-                throw new ExpiredCredentialsException("token已失效,请重新登录");
+                throw new BusinessException(ResultCode.USER_LOGIN_OVER_TIME);
             }
         }
         return executeLogin(servletRequest, servletResponse);

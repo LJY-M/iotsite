@@ -32,9 +32,9 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/projects")
-    public IPage<ProjectsDto> getProjects(@RequestParam(value = "name",required = false) String name,@RequestParam(value = "status",required = false) Integer status,
+    public IPage<ProjectDto> getProjects(@RequestParam(value = "name",required = false) String name,@RequestParam(value = "status",required = false) Integer status,
                                           @RequestParam(value = "startTime",required = false) String startTime, @RequestParam(value = "endTime",required = false) String endTime,
-                                          @RequestParam("page.current") Long current){
+                                          @RequestParam("page") Long current){
         //TODO 校验参数
         IPage page=new Page<Project>();
         page.setCurrent(current);

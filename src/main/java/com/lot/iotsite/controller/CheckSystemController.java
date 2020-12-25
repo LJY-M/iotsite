@@ -4,6 +4,7 @@ import com.lot.iotsite.domain.CheckSystem;
 import com.lot.iotsite.dto.CheckSystemDto;
 import com.lot.iotsite.queryParam.CheckSystemParam;
 import com.lot.iotsite.service.CheckSystemService;
+import org.apache.ibatis.cache.CacheKey;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -25,8 +26,12 @@ public class CheckSystemController{
      * @return
      */
     @GetMapping("/check_systems")
-    public List<CheckSystemDto> allCheckSystems(){
-        return checkSystemService.getAllCheckSystem();
+    public CheckSystemDto allCheckSystems(){
+        CheckSystemDto checkSystemDto=new CheckSystemDto();
+        checkSystemDto.setName("检查体系");
+        checkSystemDto.setId(0L);
+        checkSystemDto.setSubCheckSystems(checkSystemService.getAllCheckSystem());
+        return checkSystemDto;
     }
 
     /**
