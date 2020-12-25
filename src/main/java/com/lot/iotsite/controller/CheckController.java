@@ -3,6 +3,7 @@ package com.lot.iotsite.controller;
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.Picture;
 import com.lot.iotsite.domain.ProjectCheckResult;
+import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
 import com.lot.iotsite.queryParam.CheckParam;
 import com.lot.iotsite.service.CheckService;
@@ -30,24 +31,31 @@ public class CheckController {
     @Autowired
     private PictureService pictureService;
 
-    @PostMapping("/check")
-    public ProjectCheckResult getProjectResult(
+    @PostMapping("/check/get_project_all_check")
+    public ProjectCheckResult getProjectAllCheck(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 0);
         return projectCheckResult;
     }
 
-    @PostMapping("/check2")
-    public ProjectCheckResult getProjectResult2(
+    @PostMapping("/check/get_project_not_review_check")
+    public ProjectCheckResult getProjectNotReviewCheck(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 1);
         return projectCheckResult;
     }
 
-    @PostMapping("/check3")
-    public ProjectCheckResult getProjectResult3(
+    @PostMapping("/check/get_project_not_pass_check")
+    public ProjectCheckResult getProjectNotPassCheck(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 2);
+        return projectCheckResult;
+    }
+
+    @PostMapping("/check/get_project_pass_check")
+    public ProjectCheckResult getProjectPassCheck(
+            @RequestParam(value = "projectId", required = true) Long projectId){
+        ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 3);
         return projectCheckResult;
     }
 
@@ -73,6 +81,12 @@ public class CheckController {
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 3);
         ProjectCheckResult projectCheckResultAnalysis = checkService.resultsAnalysis(projectCheckResult);
         return projectCheckResult;
+    }
+
+    @GetMapping("/check/get_all_project_grade")
+    public List<ProjectGradeDto> getAllProjectGrade(){
+        List<ProjectGradeDto> projectGradeDtoList = checkService.getAllProjectGrade();
+        return projectGradeDtoList;
     }
 
     @PostMapping("/check/upload_result")
