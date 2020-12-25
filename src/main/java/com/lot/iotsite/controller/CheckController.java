@@ -3,6 +3,7 @@ package com.lot.iotsite.controller;
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.Picture;
 import com.lot.iotsite.domain.ProjectCheckResult;
+import com.lot.iotsite.dto.UserGroupCheckDto;
 import com.lot.iotsite.queryParam.CheckParam;
 import com.lot.iotsite.service.CheckService;
 import com.lot.iotsite.service.PictureService;
@@ -53,9 +54,17 @@ public class CheckController {
     @PostMapping("/check/get_check_list")
     public List<Check> getCheckItemByGroupIdAndIdentity(
             @RequestParam(value = "groupId", required = true) Long groupId,
-            @RequestParam(value = "identity", required = true) Long identity){
+            @RequestParam(value = "identity", required = true) Integer identity){
         List<Check> checkList = checkService.getCheckItemByGroupId(groupId, identity);
         return checkList;
+    }
+
+    @PostMapping("/check/get_check_list_plus")
+    public List<UserGroupCheckDto> getCheckItemByUserId(
+            @RequestParam(value = "userId", required = true) Long userId){
+        Assert.notNull(userId, "userId不能为空！");
+        List<UserGroupCheckDto> userGroupCheckDtoList = checkService.getCheckListByUserId(userId);
+        return userGroupCheckDtoList;
     }
 
     @PostMapping("/check/analysis")
