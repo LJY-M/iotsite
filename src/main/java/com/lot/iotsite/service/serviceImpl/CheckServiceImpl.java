@@ -2,6 +2,7 @@ package com.lot.iotsite.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.*;
+import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
 import com.lot.iotsite.dto.UserGroupDto;
 import com.lot.iotsite.mapper.CheckMapper;
@@ -39,6 +40,9 @@ public class CheckServiceImpl implements CheckService {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Override
     public Check getCheckById(Long id) {
@@ -381,5 +385,34 @@ public class CheckServiceImpl implements CheckService {
         QueryWrapper<Check> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq(Check.PROJECT_ID,projectId);
         return checkMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<ProjectGradeDto> getAllProjectGrade() {
+
+        List<Project> projectList = projectService.getAllProject();
+
+        List<ProjectGradeDto> projectGradeDtoList = new ArrayList<>();
+
+        for (int i = 0; i < projectList.size(); i++){
+
+            ProjectGradeDto projectGradeDto = new ProjectGradeDto();
+
+//            ProjectCheckResult projectCheckResult = new ProjectCheckResult();
+            ProjectCheckResult projectCheckResultAnalysis = new ProjectCheckResult();
+
+            Project project = projectList.get(i);
+
+            ProjectCheckResult projectCheckResult = getProjectCheckResultByProjectId(project.getId(), 3);
+            projectCheckResultAnalysis = resultsAnalysis(projectCheckResult);
+
+
+            projectGradeDto.setProject(project);
+            projectGradeDto.setGrade(projectCheckResultAnalysis.getGrade());
+
+            projectGradeDtoList.add(projectGradeDto);
+        }
+
+        return projectGradeDtoList;
     }
 }

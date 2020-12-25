@@ -135,4 +135,13 @@ public class ProjectServiceImpl implements ProjectService {
        queryWrapper.eq(Project.GROUP_ID,groupId);
        return projectMapper.selectOne(queryWrapper);
     }
+
+    @Override
+    public List<Project> getAllProject() {
+
+        QueryWrapper<Project> projectQueryWrapper = new QueryWrapper<>();
+        projectQueryWrapper.orderByAsc(Project.ID);
+        List<Project> projectList = projectMapper.selectList(projectQueryWrapper);
+        return projectList;
+    }
 }

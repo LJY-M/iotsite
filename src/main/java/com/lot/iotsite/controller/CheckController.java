@@ -3,6 +3,7 @@ package com.lot.iotsite.controller;
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.Picture;
 import com.lot.iotsite.domain.ProjectCheckResult;
+import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
 import com.lot.iotsite.queryParam.CheckParam;
 import com.lot.iotsite.service.CheckService;
@@ -73,6 +74,12 @@ public class CheckController {
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 3);
         ProjectCheckResult projectCheckResultAnalysis = checkService.resultsAnalysis(projectCheckResult);
         return projectCheckResult;
+    }
+
+    @GetMapping("/check/get_all_project_grade")
+    public List<ProjectGradeDto> getAllProjectGrade(){
+        List<ProjectGradeDto> projectGradeDtoList = checkService.getAllProjectGrade();
+        return projectGradeDtoList;
     }
 
     @PostMapping("/check/upload_result")

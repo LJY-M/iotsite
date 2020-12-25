@@ -2,6 +2,7 @@ package com.lot.iotsite.service;
 
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.ProjectCheckResult;
+import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
 import org.springframework.stereotype.Service;
 
@@ -32,4 +33,6 @@ public interface CheckService {
     public Integer reviewCheckResult(Long checkId, Integer flag);
 
     public Boolean deleteChecksByProjectId(Long projectId);
+
+    List<ProjectGradeDto> getAllProjectGrade();
 }
