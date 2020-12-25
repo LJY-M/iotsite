@@ -75,5 +75,5 @@ public class GroupServiceImpl implements GroupService {
         groupMapper.insert(group);
         return true;
     }
-    
+
 }

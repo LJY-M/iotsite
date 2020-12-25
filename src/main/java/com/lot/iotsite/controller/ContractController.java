@@ -85,7 +85,7 @@ public class ContractController {
    @GetMapping("/contracts")
    public IPage<ContractsDto> getContracts(@RequestParam(value = "name",required = false) String name, @RequestParam(value = "type",required = false)String type,
                                            @RequestParam(value = "startTime",required = false)String startTime, @RequestParam(value = "endTime",required = false)String endTime,
-                                           @RequestParam(value = "status",required = false)Integer status, @RequestParam("page.current")Long current){
+                                           @RequestParam(value = "status",required = false)Integer status, @RequestParam("page")Long current){
        //TODO 校验参数
        Page page=new Page<>();
        page.setCurrent(current);

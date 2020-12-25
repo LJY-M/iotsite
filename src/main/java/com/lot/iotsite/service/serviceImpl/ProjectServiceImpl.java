@@ -44,9 +44,9 @@ public class ProjectServiceImpl implements ProjectService {
     private CheckService checkService;
 
     @Override
-    public IPage<ProjectsDto> getProjects(String name, Integer status, String startTime, String endTime, IPage page) {
-        IPage<ProjectsDto> projectsDtoIPage=new Page<>();
-        List<ProjectsDto> projectsDtos=new ArrayList<>();
+    public IPage<ProjectDto> getProjects(String name, Integer status, String startTime, String endTime, IPage page) {
+        IPage<ProjectDto> projectDtoIPage=new Page<>();
+        List<ProjectDto> projectDtos=new ArrayList<>();
         LocalDateTime start=startTime==null?null:LocalDateTime.parse(startTime+" 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime end=startTime==null?null:LocalDateTime.parse(endTime+" 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         QueryWrapper<Project> queryWrapper=new QueryWrapper<>();
@@ -58,15 +58,24 @@ public class ProjectServiceImpl implements ProjectService {
         List<Project> projects=projectIPage.getRecords();
 
         for(Project item:projects){
-            ProjectsDto projectsDto=new ProjectsDto();
-            BeanUtils.copyProperties(item,projectsDto);
+            ProjectDto projectDto=new ProjectDto();
+            BeanUtils.copyProperties(item,projectDto);
             String progress= Progress.getStatus(item.getProgress());
-            projectsDto.setStatus(progress);
-            projectsDtos.add(projectsDto);
+            projectDto.setStatus(progress);
+            User user=userService.getUserById(item.getPmId());
+            projectDto.setPmName(user.getName());
+            //将groupID转换为groupName
+            Group group=groupService.getGroupById(item.getGroupId());
+            projectDto.setGroupName(group.getName());
+            //将clientIc转换为委托方名称
+            Contract contract=contractService.getContractById(item.getClientId());
+            projectDto.setClientName(contract.getClientName());
+            projectDto.setCheckSystems(projectToCheckSystemService.getCheckSystemNameByProject(item.getId()));
+            projectDtos.add(projectDto);
         }
-        BeanUtils.copyProperties(projectIPage,projectsDtoIPage);
-        projectsDtoIPage.setRecords(projectsDtos);
-        return projectsDtoIPage;
+        BeanUtils.copyProperties(projectIPage,projectDtoIPage);
+        projectDtoIPage.setRecords(projectDtos);
+        return projectDtoIPage;
     }
 
     @Override

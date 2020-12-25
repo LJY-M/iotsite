@@ -19,7 +19,7 @@ public interface ProjectService {
      * @param page
      * @return
      */
-    public IPage<ProjectsDto> getProjects(String name,Integer status,String startTime, String endTime, IPage page);
+    public IPage<ProjectDto> getProjects(String name,Integer status,String startTime, String endTime, IPage page);
 
     /**
      * 获取单个项目
