@@ -6,6 +6,8 @@ server:
 spring:
   application:
     name: iotsite
+  profiles:
+    active: prod
 
   datasource:
     username: root

@@ -13,19 +13,10 @@ import java.util.List;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class CheckSystemTest {
-    @Autowired
-    private CheckSystemService checkSystemService;
+
     @Test
     void contextLoads() {
     }
 
-    @Test
-    public void getSubCSTest(){
-        List<CheckSystem> list=checkSystemService.getSubCheckSystemById(102L);
-        for(CheckSystem item:list){
-            System.out.print(item.toString());
-        }
-        CheckSystem checkSystem=checkSystemService.getCheckSystemById(1025L);
-        System.out.print(checkSystem.getFatherId());
-    }
+
 }

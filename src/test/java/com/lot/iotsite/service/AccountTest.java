@@ -14,8 +14,5 @@ public class AccountTest {
     @Autowired
     JwtUtils jwtUtils;
 
-    @Test
-    public void createToken(){
-        //System.out.print(jwtUtils.generateToken(2020L));
-    }
+
 }
