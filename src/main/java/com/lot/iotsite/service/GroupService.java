@@ -13,6 +13,8 @@ public interface GroupService {
     List<SimpleGroupDto> getGroupNames(String groupName);
     List<UserGroup> getGroupByUser(Long userId);
 
+    // 查询所有group
+    List<SimpleGroupDto> getAllGroup();
     // 新增检查小组信息
     Boolean save(Group group);
     // 删除项目检查小组

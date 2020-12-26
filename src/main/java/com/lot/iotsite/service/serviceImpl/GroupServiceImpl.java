@@ -3,7 +3,6 @@ package com.lot.iotsite.service.serviceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.Group;
 import com.lot.iotsite.domain.UserGroup;
-import com.lot.iotsite.dto.SimpleContractDto;
 import com.lot.iotsite.dto.SimpleGroupDto;
 import com.lot.iotsite.mapper.GroupMapper;
 import com.lot.iotsite.mapper.UserGroupMapper;
@@ -49,6 +48,20 @@ public class GroupServiceImpl implements GroupService {
        QueryWrapper<UserGroup> queryWrapper=new QueryWrapper<>();
        queryWrapper.eq(UserGroup.USER_ID,userId);
         return userGroupMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<SimpleGroupDto> getAllGroup(){
+        List<SimpleGroupDto> simpleGroupDtos = new ArrayList<>();
+        QueryWrapper<Group> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc(Group.ID);
+        List<Group> Groups = groupMapper.selectList(queryWrapper);
+        for (Group group : Groups){
+            SimpleGroupDto simpleGroupDto = new SimpleGroupDto();
+            BeanUtils.copyProperties(group, simpleGroupDto);
+            simpleGroupDtos.add(simpleGroupDto);
+        }
+        return simpleGroupDtos;
     }
 
     // 删除项目检查小组
