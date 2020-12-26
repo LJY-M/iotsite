@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-//@RequestMapping("/check")
+@RequestMapping("/check")
 public class CheckController {
 
     @Autowired
@@ -32,35 +32,35 @@ public class CheckController {
     @Autowired
     private PictureService pictureService;
 
-    @PostMapping("/check/get_project_all_check")
+    @PostMapping("/get_project_all_check")
     public ProjectCheckResult getProjectAllCheck(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 0);
         return projectCheckResult;
     }
 
-    @PostMapping("/check/get_project_not_review_check")
+    @PostMapping("/get_project_not_review_check")
     public ProjectCheckResult getProjectNotReviewCheck(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 1);
         return projectCheckResult;
     }
 
-    @PostMapping("/check/get_project_not_pass_check")
+    @PostMapping("/get_project_not_pass_check")
     public ProjectCheckResult getProjectNotPassCheck(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 2);
         return projectCheckResult;
     }
 
-    @PostMapping("/check/get_project_pass_check")
+    @PostMapping("/get_project_pass_check")
     public ProjectCheckResult getProjectPassCheck(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 3);
         return projectCheckResult;
     }
 
-    @PostMapping("/check/get_check_list")
+    @PostMapping("/get_check_list")
     public List<Check> getCheckItemByGroupIdAndIdentity(
             @RequestParam(value = "groupId", required = true) Long groupId,
             @RequestParam(value = "identity", required = true) Integer identity){
@@ -68,7 +68,7 @@ public class CheckController {
         return checkList;
     }
 
-    @PostMapping("/check/get_check_list_plus")
+    @PostMapping("/get_check_list_plus")
     public List<UserGroupCheckDto> getCheckItemByUserId(
             @RequestParam(value = "userId", required = true) Long userId){
         Assert.notNull(userId, "userId不能为空！");
@@ -76,7 +76,7 @@ public class CheckController {
         return userGroupCheckDtoList;
     }
 
-    @PostMapping("/check/analysis")
+    @PostMapping("/analysis")
     public ProjectCheckResult ProjectCheckResultAnalysis(
             @RequestParam(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 3);
@@ -84,13 +84,13 @@ public class CheckController {
         return projectCheckResult;
     }
 
-    @GetMapping("/check/get_all_project_grade")
+    @GetMapping("/get_all_project_grade")
     public List<ProjectGradeDto> getAllProjectGrade(){
         List<ProjectGradeDto> projectGradeDtoList = checkService.getAllProjectGrade();
         return projectGradeDtoList;
     }
 
-    @PostMapping("/check/upload_result")
+    @PostMapping("/upload_result")
     public Boolean updateCheckResult(@SpringQueryMap CheckParam checkParam){
         Assert.notNull(checkParam.getId(),"Id不能为空！");
         Assert.notNull(checkParam.getProjectId(),"projectId不能为空！");
@@ -112,7 +112,7 @@ public class CheckController {
         return flag;
     }
 
-    @PostMapping("/check/review_result")
+    @PostMapping("/review_result")
     public Integer reviewCheckResult(
             @RequestParam(value = "checkId", required = true) Long checkId,
             @RequestParam(value = "flag", required = true) Integer flag
@@ -125,7 +125,7 @@ public class CheckController {
         return reviewReturn;
     }
 
-    @PostMapping("/check/upload_picture")
+    @PostMapping("/upload_picture")
     public Integer uploadCheckPicture(
             @RequestParam(value = "checkId", required = true) Long checkId,
             @RequestParam(value = "file", required = true) MultipartFile file
@@ -160,7 +160,7 @@ public class CheckController {
         return flag;
     }
 
-    @PostMapping("/check/get_check_item")
+    @PostMapping("/get_check_item")
     public CheckItemDto getCheckItemByCheckId(
             @RequestParam(value = "checkId", required = true) Long checkId){
         CheckItemDto checkItemDto = new CheckItemDto();
