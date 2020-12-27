@@ -507,7 +507,8 @@ public class CheckServiceImpl implements CheckService {
                 Double gradeSecond = secondaryCheckSystem.getGrade();
                 double weightSecond = secondaryCheckSystem.getRealWeight();
 
-                Double weightedScoreSecond = gradeSecond * weightSecond * weight;
+//                Double weightedScoreSecond = gradeSecond * weightSecond * weight;
+                Double weightedScoreSecond = gradeSecond * weight;
 
                 ChartElement chartElementSecond = new ChartElement();
 
