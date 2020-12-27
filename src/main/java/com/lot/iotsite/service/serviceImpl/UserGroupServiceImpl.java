@@ -73,9 +73,10 @@ public class UserGroupServiceImpl implements UserGroupService{
     }
 
     @Override
-    public Boolean delete(Long id){
+    public Boolean delete(Long groupId, Long userId){
         QueryWrapper<UserGroup> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq(UserGroup.ID, id);
+        queryWrapper.eq(UserGroup.GROUP_ID, groupId);
+        queryWrapper.eq(UserGroup.USER_ID, userId);
         Assert.isTrue(1 == userGroupMapper.delete(queryWrapper),"用户删除失败！");
         return true;
     }
@@ -119,5 +120,13 @@ public class UserGroupServiceImpl implements UserGroupService{
     public Boolean updateLeader(UserGroup userGroup){
         Assert.isTrue(1 == userGroupMapper.updateById(userGroup), "组长设置失败！");
         return true;
+    }
+
+    @Override
+    public UserGroup getUserGroupBygroupIduserId(Long groupId, Long userId){
+        QueryWrapper<UserGroup> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq(UserGroup.GROUP_ID, groupId);
+        queryWrapper.eq(UserGroup.USER_ID, userId);
+        return userGroupMapper.selectOne(queryWrapper);
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class UserDto {
 
+    private Long id;
     private Long account;
     private String name;
  // private String password; 密码不能被查询

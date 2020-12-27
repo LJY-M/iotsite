@@ -13,6 +13,7 @@ import com.lot.iotsite.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +34,8 @@ public class UserGroupController {
     @Autowired
     GroupService groupService;
 
-    @PostMapping("/check_user_group_by_id/{id}")
+    // 根据usergroup_id查询usergroup表中的记录
+    @GetMapping("/check_user_group_by_id/{id}")
     public UserGroupDto getUserGroupById(@PathVariable("id") Long id){
         UserGroup userGroup = userGroupService.getUserGroupById(id);
         User user = userService.getUserById(userGroup.getUserId());
@@ -47,11 +49,13 @@ public class UserGroupController {
         return userGroupDto;
     }
 
-    @PostMapping("/check_all_user_group")
-    public List<UserGroupDto> getAllUser(){
+    // 查询所有usergroup
+    @GetMapping("/check_all_user_group")
+    public List<UserGroupDto> getAllUserGroup(){
         return userGroupService.getAllUserGroup();
     }
 
+    // 新增保存一个usergroup
     @PostMapping("/save_user_group")
     public Boolean save(@SpringQueryMap @RequestBody UserGroupParam userGroupParam){
         org.springframework.util.Assert.notNull(userGroupParam.getGroupId(),"项目检查小组不能为空！");
@@ -62,30 +66,34 @@ public class UserGroupController {
         return userGroupService.save(userGroup);
     }
 
-    @PostMapping("/delete_user/{id}")
-    public Boolean deleteUser(@PathVariable("id") Long id){
-        return userGroupService.delete(id);
+    // 删除一个usergroup
+    @DeleteMapping("/delete_user")
+    public Boolean deleteUserGroup(@Validated @RequestParam(value = "groupId") Long groupId,
+                              @RequestParam(value = "userId") Long userId){
+        return userGroupService.delete(userId, groupId);
     }
 
-    @PostMapping("/check_group_member/{id}")
+    @GetMapping("/check_group_member/{id}")
     public List<UserDto> getGroupMember(@PathVariable("id") Long id){
         return userGroupService.getMember(id);
     }
 
-    @PostMapping("/check_group_leader/{id}")
+    @GetMapping("/check_group_leader/{id}")
     public List<UserDto> getGroupLeader(@PathVariable("id") Long id){
         return userGroupService.getLeader(id);
     }
 
-    @PostMapping("/update_leader/{id}")
-    public Boolean updateLeader(@PathVariable("id") Long id,
+    // 更新一个usergroup的成员信息
+    @PutMapping("/update_leader")
+    public Boolean updateLeader(@Validated @RequestParam(value = "groupId") Long groupId,
+                                @RequestParam(value = "userId") Long userId,
                                  @SpringQueryMap @RequestBody UserGroupParam userGroupParam){
         /**可以更改的用户信息：
          * private Long userId;
          * private Long groupId;
          * private Long isleader;
          */
-        UserGroup userGroup = userGroupService.getUserGroupById(id);
+        UserGroup userGroup = userGroupService.getUserGroupBygroupIduserId(groupId, userId);
         BeanUtils.copyProperties(userGroupParam,userGroup);
         return userGroupService.updateLeader(userGroup);
     }

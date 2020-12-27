@@ -17,11 +17,13 @@ public interface UserGroupService {
     // function_3：新增小组-用户信息
     Boolean save(UserGroup userGroup);
     // 删除项目检查小组
-    Boolean delete(Long id);
+    Boolean delete(Long groupId, Long userId);
     // 查询小组所有成员
     List<UserDto> getMember(Long id);
     // 查询小组所有是组长的成员
     List<UserDto> getLeader(Long id);
     // 设置组长
     Boolean updateLeader(UserGroup userGroup);
+    // 根据组名和用户名一起查询
+    UserGroup getUserGroupBygroupIduserId(Long groupId, Long userId);
 }

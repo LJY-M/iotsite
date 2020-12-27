@@ -32,11 +32,6 @@ public class UserController {
     @Autowired
     AccountUtils accountUtils;
 
-    @PostMapping("/test")
-    public void test(){
-        System.out.println("检测是否进入UserController");
-    }
-
     @PostMapping("/login")
     public Map<Object,Object> login(@Validated @RequestParam(value = "account") Long account,
                                     @RequestParam(value = "password") String password,

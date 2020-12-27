@@ -27,17 +27,17 @@ public class AdminController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @PostMapping("/check_user")
+    @GetMapping("/check_user")
     public List<UserDto> getAllUser(){
         return userService.getAllUser();
     }
 
-    @PostMapping("/delete_user/{id}")
+    @DeleteMapping("/delete_user/{id}")
     public Boolean deleteUserById(@PathVariable("id") Long id){
         return userService.delete(id);
     }
 
-    @PostMapping("/update_user/{id}")
+    @PutMapping("/update_user/{id}")
     public Boolean updateUserById(@PathVariable("id") Long id,
                                   @SpringQueryMap @RequestBody UserParam userParam){
         /**可以更改的用户信息：

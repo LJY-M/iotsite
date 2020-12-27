@@ -23,6 +23,11 @@ public class GroupController {
         return groupService.getGroupNames(name);
     }
 
+    @GetMapping("/check_group/{id}")
+    public Group getGroupById(@PathVariable("id") Long id){
+        return groupService.getGroupById(id);
+    }
+
     @PostMapping("/create_group")
     public Boolean saveGroup(@SpringQueryMap @RequestBody GroupParam groupParam){
         org.springframework.util.Assert.notNull(groupParam.getName(),"项目组名不能为空！");
@@ -36,12 +41,12 @@ public class GroupController {
         return groupService.getAllGroup();
     }
 
-    @PostMapping("/delete_group/{id}")
+    @DeleteMapping("/delete_group/{id}")
     public Boolean deleteUserById(@PathVariable("id") Long id){
         return groupService.delete(id);
     }
 
-    @PostMapping("/update_group/{id}")
+    @PutMapping("/update_group/{id}")
     public Boolean updateUserById(@PathVariable("id") Long id,
                                   @SpringQueryMap @RequestBody GroupParam groupParam){
         /**可以更改的用户信息：
