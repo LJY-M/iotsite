@@ -1,5 +1,6 @@
 package com.lot.iotsite.service;
 
+import com.lot.iotsite.domain.ChartElements;
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.ProjectCheckResult;
 import com.lot.iotsite.dto.CheckItemDto;
@@ -38,4 +39,8 @@ public interface CheckService {
     List<ProjectGradeDto> getAllProjectGrade();
 
     CheckItemDto getCheckItemByCheckId(Long checkId);
+
+    ChartElements getScoreCompositionTable(Long projectId);
+
+    ChartElements getWeightCompositionTable(Long projectId);
 }

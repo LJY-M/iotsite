@@ -1,5 +1,6 @@
 package com.lot.iotsite.controller;
 
+import com.lot.iotsite.domain.ChartElements;
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.Picture;
 import com.lot.iotsite.domain.ProjectCheckResult;
@@ -100,6 +101,7 @@ public class CheckController {
         Assert.notNull(checkParam.getGrade(),"grade不能为空！");
 
         Check check = new Check();
+
         BeanUtils.copyProperties(checkParam, check);
         check.setFinishDateTime(LocalDateTime.now());
 
@@ -166,5 +168,21 @@ public class CheckController {
         CheckItemDto checkItemDto = new CheckItemDto();
         checkItemDto = checkService.getCheckItemByCheckId(checkId);
         return checkItemDto;
+    }
+
+    @GetMapping("/get_score_composition_table")
+    public ChartElements getScoreCompositionTable(
+            @RequestParam(value = "projectId", required = true) Long projectId){
+        ChartElements chartElements = new ChartElements();
+        chartElements = checkService.getScoreCompositionTable(projectId);
+        return chartElements;
+    }
+
+    @GetMapping("/get_weight_composition_table")
+    public ChartElements getWeightCompositionTable(
+            @RequestParam(value = "projectId", required = true) Long projectId){
+        ChartElements chartElements = new ChartElements();
+        chartElements = checkService.getWeightCompositionTable(projectId);
+        return chartElements;
     }
 }

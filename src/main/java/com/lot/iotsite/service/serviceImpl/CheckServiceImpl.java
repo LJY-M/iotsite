@@ -314,6 +314,8 @@ public class CheckServiceImpl implements CheckService {
             double primarySumGrade = 0;
             primaryWeight[k] = primaryWeight[k] / primarySumWeight;
 
+            primaryCheckSystemList.get(k).setRealWeight(primaryWeight[k]);
+
             List<SecondaryCheckSystem> secondaryCheckSystemList =
                     primaryCheckSystemList.get(k).getSecondaryCheckSystemList();
 
@@ -335,6 +337,8 @@ public class CheckServiceImpl implements CheckService {
 
                 double secondSumGrade = 0;
                 secondWeight[j] = secondWeight[j] / secondSumWeight;
+
+                secondaryCheckSystemList.get(j).setRealWeight(secondWeight[j]);
 
                 List<CheckResult> checkResultList = secondaryCheckSystemList.get(j).getCheckResultList();
 
@@ -460,5 +464,119 @@ public class CheckServiceImpl implements CheckService {
         checkItemDto.setSecondCheckSystem(secondCheckSystem);
 
         return checkItemDto;
+    }
+
+    @Override
+    public ChartElements getScoreCompositionTable(Long projectId) {
+
+        ChartElements chartElements = new ChartElements();
+
+        ProjectCheckResult projectCheckResult = new ProjectCheckResult();
+        ProjectCheckResult projectCheckResultAnalysis = new ProjectCheckResult();
+
+        projectCheckResult = getProjectCheckResultByProjectId(projectId, 0);
+        projectCheckResultAnalysis = resultsAnalysis(projectCheckResult);
+
+        List<ChartElement> firstChartElements = new ArrayList<>();
+        List<ChartElement> secondChartElements = new ArrayList<>();
+
+        List<PrimaryCheckSystem> primaryCheckSystemList = projectCheckResultAnalysis.getPrimaryCheckSystemList();
+
+        for (int i = 0; i < primaryCheckSystemList.size(); i++){
+
+            PrimaryCheckSystem primaryCheckSystem = primaryCheckSystemList.get(i);
+
+            Double grade =  primaryCheckSystem.getGrade();
+            double weight = primaryCheckSystem.getRealWeight();
+
+            Double weightedScore = grade * weight;
+
+            ChartElement chartElement = new ChartElement();
+
+            chartElement.setElementName(primaryCheckSystem.getCheckSystem().getName());
+            chartElement.setElementValue(weightedScore);
+
+            firstChartElements.add(chartElement);
+
+            List<SecondaryCheckSystem> secondaryCheckSystemList = primaryCheckSystem.getSecondaryCheckSystemList();
+
+            for (int j = 0; j < secondaryCheckSystemList.size(); j++){
+
+                SecondaryCheckSystem secondaryCheckSystem = secondaryCheckSystemList.get(j);
+
+                Double gradeSecond = secondaryCheckSystem.getGrade();
+                double weightSecond = secondaryCheckSystem.getRealWeight();
+
+                Double weightedScoreSecond = gradeSecond * weightSecond * weight;
+
+                ChartElement chartElementSecond = new ChartElement();
+
+                chartElementSecond.setElementName(secondaryCheckSystem.getCheckSystem().getName());
+                chartElementSecond.setElementValue(weightedScoreSecond);
+
+                secondChartElements.add(chartElementSecond);
+            }
+        }
+
+        chartElements.setFirstChartElements(firstChartElements);
+        chartElements.setSecondChartElements(secondChartElements);
+
+        return chartElements;
+    }
+
+    @Override
+    public ChartElements getWeightCompositionTable(Long projectId) {
+
+        ChartElements chartElements = new ChartElements();
+
+        ProjectCheckResult projectCheckResult = new ProjectCheckResult();
+        ProjectCheckResult projectCheckResultAnalysis = new ProjectCheckResult();
+
+        projectCheckResult = getProjectCheckResultByProjectId(projectId, 0);
+        projectCheckResultAnalysis = resultsAnalysis(projectCheckResult);
+
+        List<ChartElement> firstChartElements = new ArrayList<>();
+        List<ChartElement> secondChartElements = new ArrayList<>();
+
+        List<PrimaryCheckSystem> primaryCheckSystemList = projectCheckResultAnalysis.getPrimaryCheckSystemList();
+
+        for (int i = 0; i < primaryCheckSystemList.size(); i++){
+
+            PrimaryCheckSystem primaryCheckSystem = primaryCheckSystemList.get(i);
+
+            double weight = primaryCheckSystem.getRealWeight();
+
+            Double weightedScore = weight;
+
+            ChartElement chartElement = new ChartElement();
+
+            chartElement.setElementName(primaryCheckSystem.getCheckSystem().getName());
+            chartElement.setElementValue(weightedScore);
+
+            firstChartElements.add(chartElement);
+
+            List<SecondaryCheckSystem> secondaryCheckSystemList = primaryCheckSystem.getSecondaryCheckSystemList();
+
+            for (int j = 0; j < secondaryCheckSystemList.size(); j++){
+
+                SecondaryCheckSystem secondaryCheckSystem = secondaryCheckSystemList.get(j);
+
+                double weightSecond = secondaryCheckSystem.getRealWeight();
+
+                Double weightedScoreSecond = weightSecond * weight;
+
+                ChartElement chartElementSecond = new ChartElement();
+
+                chartElementSecond.setElementName(secondaryCheckSystem.getCheckSystem().getName());
+                chartElementSecond.setElementValue(weightedScoreSecond);
+
+                secondChartElements.add(chartElementSecond);
+            }
+        }
+
+        chartElements.setFirstChartElements(firstChartElements);
+        chartElements.setSecondChartElements(secondChartElements);
+
+        return chartElements;
     }
 }
