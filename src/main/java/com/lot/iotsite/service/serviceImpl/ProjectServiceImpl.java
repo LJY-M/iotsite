@@ -139,10 +139,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project getUserProject(Long groupId) {
+    public List<Project> getUserProject(Long groupId) {
        QueryWrapper<Project> queryWrapper=new QueryWrapper<>();
-       queryWrapper.eq(Project.GROUP_ID,groupId);
-       return projectMapper.selectOne(queryWrapper);
+       queryWrapper.eq(Project.PROGRESS,Progress.UNDERWAY.code())
+               .eq(Project.GROUP_ID,groupId);
+       return projectMapper.selectList(queryWrapper);
     }
 
     @Override

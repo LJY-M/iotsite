@@ -7,7 +7,7 @@ spring:
   application:
     name: iotsite
   profiles:
-    active: prod
+    active: local
 
   datasource:
     username: root

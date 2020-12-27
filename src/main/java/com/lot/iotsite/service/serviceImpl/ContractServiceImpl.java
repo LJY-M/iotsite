@@ -128,7 +128,8 @@ public class ContractServiceImpl implements ContractService {
         List<UserGroup> userGroups=groupService.getGroupByUser(userId);
         List<Project> projects=new ArrayList<>();
         for(UserGroup group:userGroups){
-            projects.add(projectService.getUserProject(group.getGroupId()));
+            List<Project> projects1=projectService.getUserProject(group.getGroupId());
+            for(Project project:projects1) projects.add(project);
         }
 
         List<ProjectAllDto> projectAllDtos=new ArrayList<>();

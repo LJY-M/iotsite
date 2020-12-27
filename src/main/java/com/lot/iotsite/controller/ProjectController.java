@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.constant.Progress;
 import com.lot.iotsite.domain.Project;
+import com.lot.iotsite.dto.CheckSystemDto;
 import com.lot.iotsite.dto.ProjectDto;
 import com.lot.iotsite.dto.ProjectsDto;
 import com.lot.iotsite.queryParam.ProjectParam;
 import com.lot.iotsite.service.ProjectService;
+import com.lot.iotsite.service.ProjectToCheckSystemService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -22,7 +24,8 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
-
+@Autowired
+private ProjectToCheckSystemService projectToCheckSystemService;
     /**
      * 获取所有项目
      * @param name
@@ -92,5 +95,12 @@ public class ProjectController {
         return projectService.deleteProject(id);
     }
 
-
+    @GetMapping("/{id}/checkSystem")
+    public CheckSystemDto getProjectCheckSystem(@PathVariable("id")Long id){
+      CheckSystemDto checkSystemDto=new CheckSystemDto();
+      checkSystemDto.setId(0L);
+      checkSystemDto.setName("检查体系");
+      checkSystemDto.setSubCheckSystems(projectToCheckSystemService.getCheckSystemNameByProject(id));
+      return checkSystemDto;
+    }
 }

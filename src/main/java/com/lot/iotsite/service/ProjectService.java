@@ -58,7 +58,7 @@ public interface ProjectService {
 
     public Boolean deleteProjectByClienId(Long clientId);
 
-    public Project getUserProject(Long groupId);
+    public List<Project> getUserProject(Long groupId);
 
     public List<Project> getAllProject();
 }
