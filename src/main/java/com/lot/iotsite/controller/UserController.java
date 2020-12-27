@@ -74,6 +74,7 @@ public class UserController {
         org.springframework.util.Assert.notNull(userParam.getAccount(),"用户账号不能为空！");
         org.springframework.util.Assert.notNull(userParam.getName(),"用户姓名不能为空！");
         org.springframework.util.Assert.notNull(userParam.getPassword(),"用户密码不能为空！");
+        org.springframework.util.Assert.notNull(userParam.getUserLimit(),"用户身份不能为空！");
         // 对密码进行md5加密
         userParam.setPassword(SecureUtil.md5(userParam.getPassword()));
         User user = new User();

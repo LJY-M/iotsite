@@ -2,6 +2,7 @@ package com.lot.iotsite.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.domain.*;
+import com.lot.iotsite.dto.CheckItemDto;
 import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
 import com.lot.iotsite.dto.UserGroupDto;
@@ -414,5 +415,50 @@ public class CheckServiceImpl implements CheckService {
         }
 
         return projectGradeDtoList;
+    }
+
+    @Override
+    public CheckItemDto getCheckItemByCheckId(Long checkId) {
+
+        CheckItemDto checkItemDto = new CheckItemDto();
+
+        Check check = new Check();
+        check = getCheckById(checkId);
+
+        CheckSystem firstCheckSystem = new CheckSystem();
+        CheckSystem secondCheckSystem = new CheckSystem();
+
+        secondCheckSystem = checkSystemService.getCheckSystemById(check.getCheckSystemId());
+        firstCheckSystem = checkSystemService.getCheckSystemById(secondCheckSystem.getFatherId());
+
+        List<Picture> pictureList = new ArrayList<>();
+        List<String> pictureUrlList = new ArrayList<>();
+
+        pictureList = pictureService.getPictureByCheckId(checkId);
+        for (int i = 0; i < pictureList.size(); i++){
+            String pictureUrl = "";
+            pictureUrl = pictureList.get(i).getUrl();
+            pictureUrlList.add(pictureUrl);
+        }
+
+        String checkRisk = "";
+
+        if (check.getGrade() == 0)
+            checkRisk = "无风险";
+        else if (check.getGrade() == 1)
+            checkRisk = "轻度风险";
+        else if (check.getGrade() == 2)
+            checkRisk = "一般风险";
+        else if (check.getGrade() == 3)
+            checkRisk = "高危风险";
+
+        checkItemDto.setCheck(check);
+        checkItemDto.setCheckRisk(checkRisk);
+        checkItemDto.setCheckSystemName(secondCheckSystem.getName());
+        checkItemDto.setPictureUrlList(pictureUrlList);
+        checkItemDto.setFirstCheckSystem(firstCheckSystem);
+        checkItemDto.setSecondCheckSystem(secondCheckSystem);
+
+        return checkItemDto;
     }
 }

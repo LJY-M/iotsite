@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.nio.file.Watchable;
+import java.util.List;
 
 @Service
 public class PictureServiceImpl implements PictureService {
@@ -31,5 +32,13 @@ public class PictureServiceImpl implements PictureService {
         Assert.isNull(picture1,"该图片已存在");
         int flag = pictureMapper.insert(picture);
         return flag;
+    }
+
+    @Override
+    public List<Picture> getPictureByCheckId(Long checkID) {
+        QueryWrapper<Picture> pictureQueryWrapper = new QueryWrapper<>();
+        pictureQueryWrapper.eq(Picture.CHECK_ID, checkID);
+        List<Picture> pictureList = pictureMapper.selectList(pictureQueryWrapper);
+        return pictureList;
     }
 }
