@@ -26,6 +26,8 @@ public interface CheckService {
 //    checkFlag = 2;    get project not reviewed check item (leader)
     List<Check> getCheckItemByGroupId(Long groupId, Integer checkFlag);
 
+    List<CheckItemDto> getCheckItemByProjectId(Long projectId);
+
     ProjectCheckResult resultsAnalysis(ProjectCheckResult projectCheckResult);
 
     List<UserGroupCheckDto> getCheckListByUserId(Long userID);

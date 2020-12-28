@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,6 +90,22 @@ public class CheckController {
     public List<ProjectGradeDto> getAllProjectGrade(){
         List<ProjectGradeDto> projectGradeDtoList = checkService.getAllProjectGrade();
         return projectGradeDtoList;
+    }
+
+        @GetMapping("/get_check_item_by_project_id")
+    public List<CheckItemDto> getCheckItemByProjectId(
+            @RequestParam(value = "projectId", required = true) Long projectId){
+        List<CheckItemDto> checkItemDtoList = new ArrayList<>();
+        checkItemDtoList = checkService.getCheckItemByProjectId(projectId);
+        return checkItemDtoList;
+    }
+
+    @GetMapping("/get_check_item_by_check_id")
+    public CheckItemDto getCheckItemByCheckId(
+            @RequestParam(value = "checkId", required = true) Long checkId){
+        CheckItemDto checkItemDto = new CheckItemDto();
+        checkItemDto = checkService.getCheckItemByCheckId(checkId);
+        return checkItemDto;
     }
 
     @PutMapping("/upload_result")
@@ -162,13 +179,7 @@ public class CheckController {
         return flag;
     }
 
-    @GetMapping("/get_check_item")
-    public CheckItemDto getCheckItemByCheckId(
-            @RequestParam(value = "checkId", required = true) Long checkId){
-        CheckItemDto checkItemDto = new CheckItemDto();
-        checkItemDto = checkService.getCheckItemByCheckId(checkId);
-        return checkItemDto;
-    }
+
 
     @GetMapping("/get_score_composition_table")
     public ChartElements getScoreCompositionTable(

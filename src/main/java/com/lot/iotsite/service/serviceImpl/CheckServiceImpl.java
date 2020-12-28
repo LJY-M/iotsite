@@ -449,6 +449,38 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
+    public List<CheckItemDto> getCheckItemByProjectId(Long projectId) {
+
+        List<CheckItemDto> checkItemDtoList = new ArrayList<>();
+
+        ProjectCheckResult projectCheckResult = new ProjectCheckResult();
+        projectCheckResult = getProjectCheckResultByProjectId(projectId, 0);
+
+        List<PrimaryCheckSystem> primaryCheckSystemList = projectCheckResult.getPrimaryCheckSystemList();
+
+        for (int i = 0; i < primaryCheckSystemList.size(); i++){
+            PrimaryCheckSystem primaryCheckSystem = primaryCheckSystemList.get(i);
+            List<SecondaryCheckSystem> secondaryCheckSystemList = primaryCheckSystem.getSecondaryCheckSystemList();
+
+            for (int j = 0; j < secondaryCheckSystemList.size(); j++){
+                SecondaryCheckSystem secondaryCheckSystem = secondaryCheckSystemList.get(j);
+                List<CheckResult> checkResultList = secondaryCheckSystem.getCheckResultList();
+
+                for (int k = 0; k < checkResultList.size(); k++){
+                    CheckResult checkResult = checkResultList.get(k);
+                    Long checkId = checkResult.getCheck().getId();
+
+                    CheckItemDto checkItemDto = getCheckItemByCheckId(checkId);
+
+                    checkItemDtoList.add(checkItemDto);
+                }
+            }
+        }
+
+        return checkItemDtoList;
+    }
+
+    @Override
     public CheckItemDto getCheckItemByCheckId(Long checkId) {
 
         CheckItemDto checkItemDto = new CheckItemDto();
@@ -497,7 +529,11 @@ public class CheckServiceImpl implements CheckService {
 
         checkItemDto.setCheckId(check.getId());
         checkItemDto.setFinishDataTime(check.getFinishDateTime());
-        checkItemDto.setUserName(user.getName());
+
+        if (user == null)
+            checkItemDto.setUserName("");
+        else
+            checkItemDto.setUserName(user.getName());
 
         return checkItemDto;
     }
