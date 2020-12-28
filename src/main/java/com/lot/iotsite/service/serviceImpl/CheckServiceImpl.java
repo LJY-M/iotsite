@@ -240,11 +240,30 @@ public class CheckServiceImpl implements CheckService {
 
             UserGroup userGroup = userGroupList.get(i);
 
+            Group group = groupService.getGroupById(userGroup.getGroupId());
+
             List<Check> checkList = getCheckItemByGroupId(userGroup.getGroupId(),
                     userGroup.getIsLeader() + 1);
 
+            List<CheckResult> checkResultList = new ArrayList<>();
+
+            for (int j = 0; j < checkList.size(); j++){
+                CheckResult checkResult = new CheckResult();
+
+                Check check = new Check();
+                check = checkList.get(j);
+
+                List<Picture> pictureList = pictureService.getPictureByCheckId(check.getId());
+
+                checkResult.setCheck(check);
+                checkResult.setPictureList(pictureList);
+
+                checkResultList.add(checkResult);
+            }
+
             userGroupCheckDto.setUserGroup(userGroup);
-            userGroupCheckDto.setCheckList(checkList);
+            userGroupCheckDto.setGroup(group);
+            userGroupCheckDto.setCheckResultList(checkResultList);
 
             userGroupCheckDtoList.add(userGroupCheckDto);
         }
