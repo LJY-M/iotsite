@@ -1,5 +1,7 @@
 package com.lot.iotsite.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.domain.ChartElements;
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.Picture;
@@ -87,17 +89,31 @@ public class CheckController {
     }
 
     @GetMapping("/get_all_project_grade")
-    public List<ProjectGradeDto> getAllProjectGrade(){
+    public IPage<ProjectGradeDto> getAllProjectGrade(
+            @RequestParam("page") Long current){
         List<ProjectGradeDto> projectGradeDtoList = checkService.getAllProjectGrade();
-        return projectGradeDtoList;
+
+        IPage<ProjectGradeDto> projectGradeDtoIPage = new Page<>();
+        projectGradeDtoIPage.setCurrent(current);
+        projectGradeDtoIPage.setSize(10);
+        projectGradeDtoIPage.setRecords(projectGradeDtoList);
+
+        return projectGradeDtoIPage;
     }
 
         @GetMapping("/get_check_item_by_project_id")
-    public List<CheckItemDto> getCheckItemByProjectId(
-            @RequestParam(value = "projectId", required = true) Long projectId){
+    public IPage<CheckItemDto> getCheckItemByProjectId(
+            @RequestParam(value = "projectId", required = true) Long projectId,
+            @RequestParam("page") Long current){
         List<CheckItemDto> checkItemDtoList = new ArrayList<>();
         checkItemDtoList = checkService.getCheckItemByProjectId(projectId);
-        return checkItemDtoList;
+
+        IPage<CheckItemDto> checkItemDtoIPage = new Page<>();
+        checkItemDtoIPage.setCurrent(current);
+        checkItemDtoIPage.setSize(10);
+        checkItemDtoIPage.setRecords(checkItemDtoList);
+
+        return checkItemDtoIPage;
     }
 
     @GetMapping("/get_check_item_by_check_id")
