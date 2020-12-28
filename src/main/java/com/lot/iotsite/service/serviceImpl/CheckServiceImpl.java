@@ -248,9 +248,23 @@ public class CheckServiceImpl implements CheckService {
         return userGroupCheckDtoList;
     }
 
+    public Check getCheckByProjectIDAndCheckSystemId(Check check){
+        Long projectId = check.getProjectId();
+        Long checkSystemId = check.getCheckSystemId();
+
+        Check checkResult = new Check();
+        QueryWrapper<Check> checkQueryWrapper = new QueryWrapper<>();
+        checkQueryWrapper.eq(Check.PROJECT_ID, projectId);
+        checkQueryWrapper.eq(Check.CHECK_SYSTEM_ID, checkSystemId);
+        checkResult = checkMapper.selectOne(checkQueryWrapper);
+
+        return checkResult;
+    }
+
     @Override
     public Boolean uploadCheckResult(Check check) {
-        Check check1 = getCheckById(check.getId());
+//        Check check1 = getCheckById(check.getId());
+        Check check1 = getCheckByProjectIDAndCheckSystemId(check);
         Assert.notNull(check1, "该检查结果不存在！");
 
         Assert.isTrue(check1.getExamState() == 0, "审核前不能重复提交");
