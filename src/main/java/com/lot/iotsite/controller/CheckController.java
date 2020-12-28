@@ -162,12 +162,19 @@ public class CheckController {
 
     @PostMapping("/upload_picture")
     public Integer uploadCheckPicture(
-            @RequestParam(value = "checkId", required = true) Long checkId,
+            @RequestParam(value = "projectId", required = true) Long projectId,
+            @RequestParam(value = "checkSystemId", required = true) Long checkSystemId,
             @RequestParam(value = "file", required = true) MultipartFile file
             ){
         if (file.isEmpty()){
             System.out.println("图片为空！");
         }
+
+        Check check = new Check();
+        check = checkService.getCheckByProjectIdAndCheckSystemId(projectId, checkSystemId);
+        Long checkId = new Long(0);
+        if (check != null)
+            checkId = check.getId();
 
         String fileName = file.getOriginalFilename();
         String suffixName = fileName.substring(fileName.lastIndexOf("."));

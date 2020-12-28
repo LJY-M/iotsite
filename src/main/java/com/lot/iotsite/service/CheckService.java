@@ -44,6 +44,8 @@ public interface CheckService {
 
     ChartElements getScoreCompositionTable(Long projectId);
 
+    Check getCheckByProjectIdAndCheckSystemId(Long projectId, Long checkSystemId);
+
     ChartElements getWeightCompositionTable(Long projectId);
 
     Boolean insertChecks(Long projectId,Long userId,Long checkSystemId,Integer grade, String description);

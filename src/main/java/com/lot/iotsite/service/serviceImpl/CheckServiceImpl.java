@@ -430,6 +430,14 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
+    public Check getCheckByProjectIdAndCheckSystemId(Long projectId, Long checkSystemId) {
+        QueryWrapper<Check> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq(Check.PROJECT_ID,projectId);
+        queryWrapper.eq(Check.CHECK_SYSTEM_ID,checkSystemId);
+        return checkMapper.selectOne(queryWrapper);
+    }
+
+    @Override
     public List<ProjectGradeDto> getAllProjectGrade() {
 
         List<Project> projectList = projectService.getAllProject();
