@@ -1,6 +1,7 @@
 package com.lot.iotsite.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.lot.iotsite.constant.Progress;
 import com.lot.iotsite.domain.*;
 import com.lot.iotsite.dto.CheckItemDto;
 import com.lot.iotsite.dto.ProjectGradeDto;
@@ -32,6 +33,9 @@ public class CheckServiceImpl implements CheckService {
 
     @Autowired
     private CheckSystemService checkSystemService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     ProjectToCheckSystemService projectToCheckSystemService;
@@ -425,9 +429,18 @@ public class CheckServiceImpl implements CheckService {
             ProjectCheckResult projectCheckResult = getProjectCheckResultByProjectId(project.getId(), 3);
             projectCheckResultAnalysis = resultsAnalysis(projectCheckResult);
 
+            Group group = groupService.getGroupById(project.getGroupId());
 
             projectGradeDto.setProject(project);
             projectGradeDto.setGrade(projectCheckResultAnalysis.getGrade());
+
+            projectGradeDto.setProjectId(project.getId());
+            projectGradeDto.setProjectName(project.getName());
+            projectGradeDto.setBuildUnit(project.getBuildUnit());
+            projectGradeDto.setConstructionUnit(project.getConstructionUnit());
+            projectGradeDto.setSupervisorUnit(project.getSupervisorUnit());
+            projectGradeDto.setGroupName(group.getName());
+            projectGradeDto.setStatus(Progress.getStatus(project.getProgress()));
 
             projectGradeDtoList.add(projectGradeDto);
         }
@@ -472,10 +485,19 @@ public class CheckServiceImpl implements CheckService {
 
         checkItemDto.setCheck(check);
         checkItemDto.setCheckRisk(checkRisk);
-        checkItemDto.setCheckSystemName(secondCheckSystem.getName());
+        checkItemDto.setCheckSystemName( firstCheckSystem.getName() + "-" + secondCheckSystem.getName());
         checkItemDto.setPictureUrlList(pictureUrlList);
         checkItemDto.setFirstCheckSystem(firstCheckSystem);
         checkItemDto.setSecondCheckSystem(secondCheckSystem);
+
+        Long userId = new Long(0);
+        userId = check.getUserId();
+        User user = new User();
+        user = userService.getUserById(userId);
+
+        checkItemDto.setCheckId(check.getId());
+        checkItemDto.setFinishDataTime(check.getFinishDateTime());
+        checkItemDto.setUserName(user.getName());
 
         return checkItemDto;
     }
