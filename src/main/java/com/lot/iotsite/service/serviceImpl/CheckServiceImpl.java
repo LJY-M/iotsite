@@ -652,4 +652,24 @@ public class CheckServiceImpl implements CheckService {
 
         return chartElements;
     }
+
+    @Override
+    public Boolean insertChecks(Long projectId, Long userId, Long checkSystemId, Integer grade, String description) {
+        QueryWrapper<Check> wrapper=new QueryWrapper<>();
+        wrapper.eq(Check.PROJECT_ID,projectId)
+                .eq(Check.CHECK_SYSTEM_ID,checkSystemId);
+        Check check=new Check();
+        check.setCheckSystemId(checkSystemId);
+        check.setDescription(description);
+        check.setGrade(grade);
+        checkMapper.update(check,wrapper);
+        return true;
+    }
+
+    @Override
+    public Boolean insertCheck(Check check) {
+        check.setExamState(1);
+        Assert.isTrue(1==checkMapper.insert(check),"创建项目失败!");
+        return true;
+    }
 }

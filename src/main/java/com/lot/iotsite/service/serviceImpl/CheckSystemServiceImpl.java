@@ -34,6 +34,7 @@ public class CheckSystemServiceImpl implements CheckSystemService {
             BeanUtils.copyProperties(item,checkSystemDto);
             checkSystemDtos.add(checkSystemDto);
         }
+
         for(CheckSystemDto item:checkSystemDtos){
             List<CheckSystem> subCheckSystems=getSubCheckSystemById(item.getId());
             List<CheckSystemDto> subCheckSystemDtos=new ArrayList<>();

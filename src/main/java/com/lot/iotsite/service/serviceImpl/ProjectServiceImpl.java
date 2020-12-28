@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.constant.Progress;
-import com.lot.iotsite.domain.Contract;
-import com.lot.iotsite.domain.Group;
-import com.lot.iotsite.domain.Project;
-import com.lot.iotsite.domain.User;
+import com.lot.iotsite.domain.*;
 import com.lot.iotsite.dto.ProjectDto;
 import com.lot.iotsite.dto.ProjectsDto;
 import com.lot.iotsite.mapper.ProjectMapper;
@@ -21,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -42,6 +40,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private CheckService checkService;
+
+    @Autowired
+    private CheckSystemService checkSystemService;
 
     @Override
     public IPage<ProjectDto> getProjects(String name, Integer status, String startTime, String endTime, IPage page) {
@@ -104,6 +105,21 @@ public class ProjectServiceImpl implements ProjectService {
     public Boolean addProject(Project project,List<Long> fatherIds) {
       Assert.isTrue(1==projectMapper.insert(project),"添加项目失败！");
       projectToCheckSystemService.addProjectToCheckSystems(fatherIds,project.getId());
+      //生成检查记录
+        for(Long fatherId:fatherIds) {
+            List<CheckSystem> subCheckSystem = checkSystemService.getSubCheckSystemById(fatherId);
+            List<Long> checkSystems=subCheckSystem.stream().map(c->c.getId()).collect(Collectors.toList());
+            for(Long checkSystemId:checkSystems){
+                Check check=new Check();
+                check.setProjectId(project.getId());
+                check.setGroupId(project.getGroupId());
+                check.setCheckSystemId(checkSystemId);
+                check.setGrade(0);
+                check.setPassState(0);
+                check.setExamState(0);
+                checkService.insertCheck(check);
+            }
+        }
       return true;
     }
 
