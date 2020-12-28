@@ -185,4 +185,12 @@ public class CheckController {
         chartElements = checkService.getWeightCompositionTable(projectId);
         return chartElements;
     }
+
+    @PutMapping("/check")
+    public Boolean addCheck(@RequestParam("projectId") Long projectId,
+                            @RequestParam("userId") Long userId,
+                            @RequestParam("checkSystemId") Long checkSystemId,
+                            @RequestParam("grade") Integer grade, @RequestParam("description") String description){
+        return checkService.insertChecks(projectId,userId,checkSystemId,grade,description);
+    }
 }

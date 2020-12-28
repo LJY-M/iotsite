@@ -1,6 +1,8 @@
 package com.lot.iotsite.service.serviceImpl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.lot.iotsite.domain.*;
 import com.lot.iotsite.dto.CheckItemDto;
 import com.lot.iotsite.dto.ProjectGradeDto;
@@ -579,5 +581,25 @@ public class CheckServiceImpl implements CheckService {
         chartElements.setSecondChartElements(secondChartElements);
 
         return chartElements;
+    }
+
+    @Override
+    public Boolean insertChecks(Long projectId, Long userId, Long checkSystemId, Integer grade, String description) {
+        QueryWrapper<Check> wrapper=new QueryWrapper<>();
+        wrapper.eq(Check.PROJECT_ID,projectId)
+                .eq(Check.CHECK_SYSTEM_ID,checkSystemId);
+        Check check=new Check();
+        check.setCheckSystemId(checkSystemId);
+        check.setDescription(description);
+        check.setGrade(grade);
+        checkMapper.update(check,wrapper);
+        return true;
+    }
+
+    @Override
+    public Boolean insertCheck(Check check) {
+        check.setExamState(1);
+        Assert.isTrue(1==checkMapper.insert(check),"创建项目失败!");
+        return true;
     }
 }

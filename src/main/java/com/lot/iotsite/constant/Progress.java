@@ -8,10 +8,12 @@ public enum Progress {
     FINISH(103,"已完成");
     private Integer code;
     private String status;
+
     Progress(Integer code,String status){
         this.code=code;
         this.status=status;
     }
+
      public Integer code(){return code;}
      public String status(){return status;}
 
