@@ -93,7 +93,7 @@ public class CheckController {
 
     @PutMapping("/upload_result")
     public Boolean updateCheckResult(@SpringQueryMap CheckParam checkParam){
-        Assert.notNull(checkParam.getId(),"Id不能为空！");
+//        Assert.notNull(checkParam.getId(),"Id不能为空！");
         Assert.notNull(checkParam.getProjectId(),"projectId不能为空！");
         Assert.notNull(checkParam.getGroupId(),"groupId不能为空！");
         Assert.notNull(checkParam.getUserId(),"userId不能为空！");
