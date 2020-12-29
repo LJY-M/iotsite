@@ -62,6 +62,7 @@ public class UserGroupController {
         org.springframework.util.Assert.notNull(userGroupParam.getUserId(),"用户不能为空！");
         org.springframework.util.Assert.notNull(userGroupParam.getIsleader(),"是否为组长不能为空！");
         UserGroup userGroup = new UserGroup();
+        userGroupParam.setIsleader(0L);
         BeanUtils.copyProperties(userGroupParam, userGroup);
         return userGroupService.save(userGroup);
     }
@@ -70,7 +71,7 @@ public class UserGroupController {
     @DeleteMapping("/delete_user")
     public Boolean deleteUserGroup(@Validated @RequestParam(value = "groupId") Long groupId,
                               @RequestParam(value = "userId") Long userId){
-        return userGroupService.delete(userId, groupId);
+        return userGroupService.delete(groupId, userId);
     }
 
     @GetMapping("/check_group_member/{id}")
