@@ -209,22 +209,16 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public List<Check> getCheckItemByGroupId(Long groupId, Integer checkFlag) {
-
         QueryWrapper<Check> checkQueryWrapper = new QueryWrapper<>();
         checkQueryWrapper.eq(Check.GROUP_ID, groupId);
-
-
         if (checkFlag == 2){
             checkQueryWrapper.eq(Check.PASS_STATE, 0);
             checkQueryWrapper.eq(Check.EXAM_STATE, 1);
         }
         if (checkFlag == 1){
-
             checkQueryWrapper.eq(Check.PASS_STATE, 0);
         }
-
         List<Check> checkList = checkMapper.selectList(checkQueryWrapper);
-
         return checkList;
     }
 
@@ -514,8 +508,7 @@ public class CheckServiceImpl implements CheckService {
 
         CheckItemDto checkItemDto = new CheckItemDto();
 
-        Check check = new Check();
-        check = getCheckById(checkId);
+        Check check = getCheckById(checkId);
 
         CheckSystem firstCheckSystem = new CheckSystem();
         CheckSystem secondCheckSystem = new CheckSystem();

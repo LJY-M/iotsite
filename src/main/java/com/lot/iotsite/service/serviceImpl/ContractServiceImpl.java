@@ -135,23 +135,28 @@ public class ContractServiceImpl implements ContractService {
 
         List<ProjectAllDto> projectAllDtos=new ArrayList<>();
         Set<Contract> contracts=new HashSet<>();
-        for(Project project:projects){
+        for(Project project:projects) {
             contracts.add(getContractByProject(project));
-            ProjectAllDto projectAllDto=new ProjectAllDto();
+            ProjectAllDto projectAllDto = new ProjectAllDto();
             projectAllDto.setProjectId(project.getId());
             projectAllDto.setProjectName(project.getName());
             projectAllDto.setClientId(project.getClientId());
-            List<CheckSystemDto> checkSystemdtos=projectToCheckSystemService.getCheckSystemNameByProject(project.getId());
-            List<CheckSystemStatusDto> checkSystemStatusDtos=new ArrayList<>();
-            for(CheckSystemDto checkSystemDto:checkSystemdtos) {
+            List<CheckSystemDto> checkSystemdtos = projectToCheckSystemService.getCheckSystemNameByProject(project.getId());
+            List<CheckSystemStatusDto> checkSystemStatusDtos = new ArrayList<>();
+            for (CheckSystemDto checkSystemDto : checkSystemdtos) {
+                CheckSystemStatusDto checkSystemStatusDto = new CheckSystemStatusDto();
+                BeanUtils.copyProperties(checkSystemDto, checkSystemStatusDto);
+                List<CheckSystemStatusDto> checkSystemStatusDtos1 = new ArrayList<>();
                 for (CheckSystemDto checkSystemDto1 : checkSystemDto.getSubCheckSystems()) {
-                    CheckSystemStatusDto checkSystemStatusDto = new CheckSystemStatusDto();
+                    CheckSystemStatusDto checkSystemStatusDto1 = new CheckSystemStatusDto();
                     Check check = checkService.getCheckByProjectIdAndCheckSystemId(project.getId(), checkSystemDto1.getId());
-                    BeanUtils.copyProperties(checkSystemDto1, checkSystemStatusDto);
-                    checkSystemStatusDto.setExamState(check.getExamState());
-                    checkSystemStatusDto.setPassState(check.getPassState());
-                    checkSystemStatusDtos.add(checkSystemStatusDto);
+                    BeanUtils.copyProperties(checkSystemDto1, checkSystemStatusDto1);
+                    checkSystemStatusDto1.setExamState(check.getExamState());
+                    checkSystemStatusDto1.setPassState(check.getPassState());
+                    checkSystemStatusDtos1.add(checkSystemStatusDto1);
                 }
+                checkSystemStatusDto.setSubCheckSystems(checkSystemStatusDtos1);
+                checkSystemStatusDtos.add(checkSystemStatusDto);
             }
             projectAllDto.setCheckSystems(checkSystemStatusDtos);
             projectAllDtos.add(projectAllDto);
