@@ -3,8 +3,10 @@ package com.lot.iotsite.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.lot.iotsite.constant.ResultCode;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.SimpleUserDto;
+import com.lot.iotsite.exception.BusinessException;
 import com.lot.iotsite.queryParam.UserParam;
 import com.lot.iotsite.service.UserService;
 import com.lot.iotsite.utils.AccountUtils;
@@ -40,8 +42,7 @@ public class UserController {
         User user = userService.getUserByAccount(account);
         Assert.notNull(user, "用户不存在");
         if (!user.getPassword().equals(SecureUtil.md5(password))) {
-            System.out.println("密码错误");
-            return null;
+            throw new BusinessException(ResultCode.USER_LOGIN_ERROR);
         }
         String jwt = jwtUtils.generateToken(user.getId(), user.getUserLimit());
         response.setHeader("Authorization", jwt);
@@ -69,8 +70,9 @@ public class UserController {
         org.springframework.util.Assert.notNull(userParam.getAccount(),"用户账号不能为空！");
         org.springframework.util.Assert.notNull(userParam.getName(),"用户姓名不能为空！");
         org.springframework.util.Assert.notNull(userParam.getPassword(),"用户密码不能为空！");
-        org.springframework.util.Assert.notNull(userParam.getUserLimit(),"用户身份不能为空！");
+        //org.springframework.util.Assert.notNull(userParam.getUserLimit(),"用户身份不能为空！");
         // 对密码进行md5加密
+        userParam.setUserLimit(0);
         userParam.setPassword(SecureUtil.md5(userParam.getPassword()));
         User user = new User();
         BeanUtils.copyProperties(userParam,user);
@@ -126,11 +128,7 @@ public class UserController {
          *     private Integer telephone;
          *     private String job;
          */
-        System.out.println("输出id：" + id);
         User user = userService.getUserById(id);
-        if(userParam.getSex() instanceof String){
-            System.out.println("sex是string类型");
-        }
         userParam.setPassword(SecureUtil.md5(userParam.getPassword()));
         BeanUtils.copyProperties(userParam,user);
         return userService.update(user);
