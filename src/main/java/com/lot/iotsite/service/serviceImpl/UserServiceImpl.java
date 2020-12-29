@@ -1,6 +1,8 @@
 package com.lot.iotsite.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.SimpleUserDto;
 import com.lot.iotsite.dto.UserDto;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -55,17 +59,20 @@ public class UserServiceImpl implements UserService{
     //员工信息管理部分
     // function_1: 员工信息显示
     @Override
-    public List<UserDto> getAllUser(){
+    public IPage<UserDto> getAllUser(IPage<User> page){
+        IPage<UserDto> dtoPage=new Page<>();
+        BeanUtils.copyProperties(page,dtoPage);
         List<UserDto> userDtos = new ArrayList<>();
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc(User.ID);
-        List<User> Users = userMapper.selectList(queryWrapper);
-        for (User person:Users){
+        page = userMapper.selectPage(page,queryWrapper);
+        for (User person:page.getRecords()){
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(person, userDto);
             userDtos.add(userDto);
         }
-        return userDtos;
+        dtoPage.setRecords(userDtos);
+        return dtoPage;
     }
 
     // function_2: 删除员工
@@ -97,5 +104,21 @@ public class UserServiceImpl implements UserService{
             simpleUserDtos.add(simpleUserDto);
         }
         return simpleUserDtos;
+    }
+
+    @Override
+    public List<Map> getUserNotAdmin(){
+        List<Map> userDtos = new ArrayList<>();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(User.USER_LIMIT,0);
+        queryWrapper.orderByAsc(User.ID);
+        List<User> users = userMapper.selectList(queryWrapper);
+        for (User person: users){
+            Map map = new HashMap();
+            map.put("userId",person.getId().toString());
+            map.put("userName",person.getName());
+            userDtos.add(map);
+        }
+        return userDtos;
     }
 }

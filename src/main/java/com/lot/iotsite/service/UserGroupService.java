@@ -19,7 +19,7 @@ public interface UserGroupService {
     // 删除项目检查小组
     Boolean delete(Long groupId, Long userId);
     // 查询小组所有成员
-    List<UserDto> getMember(Long id);
+    List<UserGroupDto> getMember(Long id);
     // 查询小组所有是组长的成员
     List<UserDto> getLeader(Long id);
     // 设置组长

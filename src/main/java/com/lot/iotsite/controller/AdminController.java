@@ -2,18 +2,21 @@ package com.lot.iotsite.controller;
 
 
 import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.UserDto;
 import com.lot.iotsite.queryParam.UserParam;
 import com.lot.iotsite.service.UserGroupService;
-import com.lot.iotsite.service.UserService;
 import com.lot.iotsite.utils.JwtUtils;
+import com.lot.iotsite.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
@@ -28,8 +31,16 @@ public class AdminController {
     JwtUtils jwtUtils;
 
     @GetMapping("/check_user")
-    public List<UserDto> getAllUser(){
-        return userService.getAllUser();
+    public IPage<UserDto> getAllUser(@RequestParam("page") Long current ,@RequestParam("limit") long size){
+        IPage<User> page=new Page<>();
+        page.setCurrent(current);
+        page.setSize(size);
+        return userService.getAllUser(page);
+    }
+
+    @GetMapping("/check_user_not_admin")
+    public List<Map> getAllUserNotAdmin(){
+        return userService.getUserNotAdmin();
     }
 
     @DeleteMapping("/delete_user/{id}")

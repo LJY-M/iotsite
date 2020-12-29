@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.constant.Progress;
 import com.lot.iotsite.domain.Contract;
-import com.lot.iotsite.domain.User;
 import com.lot.iotsite.dto.ContractAllDto;
 import com.lot.iotsite.dto.ContractDto;
 import com.lot.iotsite.dto.ContractsDto;
@@ -12,7 +11,6 @@ import com.lot.iotsite.dto.SimpleContractDto;
 import com.lot.iotsite.queryParam.ContractParam;
 import com.lot.iotsite.service.ContractService;
 import com.lot.iotsite.utils.AccountUtils;
-import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -104,7 +102,7 @@ public class ContractController {
     }
 
    @GetMapping("/client")
-   public List<SimpleContractDto> getAllContractName(@RequestParam("name")String clientName){
+   public List<SimpleContractDto> getAllContractName(@RequestParam(value = "name",required = false)String clientName){
        return  contractService.getAllContractName(clientName);
    }
 

@@ -1,8 +1,6 @@
 package com.lot.iotsite.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.lot.iotsite.baseClass.BaseEntity;
 import io.swagger.annotations.ApiModel;
@@ -12,9 +10,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Set;
 
 /**
  * <p>
@@ -71,7 +66,7 @@ public class User  extends BaseEntity {
 
     @TableField("telephone")
     @ApiModelProperty("电话")
-    private Integer telephone;
+    private String telephone;
 
     @TableField("job")
     @ApiModelProperty("职位")
