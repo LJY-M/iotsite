@@ -8,6 +8,8 @@ import java.util.List;
 public class ProjectCheckResult {
 
 //    Project item attribute
+    private Long id;
+
     private Project project;
 
     private Double grade;

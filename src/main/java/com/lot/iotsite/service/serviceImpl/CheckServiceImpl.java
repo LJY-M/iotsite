@@ -4,7 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.constant.Progress;
 import com.lot.iotsite.constant.RiskLevel;
 import com.lot.iotsite.domain.*;
+<<<<<<< .mine
 import com.lot.iotsite.dto.*;
+
+
+=======
+import com.lot.iotsite.dto.CheckItemDto;
+import com.lot.iotsite.dto.ProjectGradeDto;
+import com.lot.iotsite.dto.UserGroupCheckDto;
+>>>>>>> .theirs
 import com.lot.iotsite.mapper.CheckMapper;
 import com.lot.iotsite.mapper.PictureMapper;
 import com.lot.iotsite.mapper.ProjectMapper;
@@ -14,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
 
 @Service
@@ -51,6 +58,7 @@ public class CheckServiceImpl implements CheckService {
     public Check getCheckById(Long id) {
         return checkMapper.selectById(id);
     }
+
 
     @Override
     public ProjectCheckResult getProjectCheckResultByProjectId(Long projectId, int checkFlag) {
@@ -241,7 +249,7 @@ public class CheckServiceImpl implements CheckService {
             Group group = groupService.getGroupById(userGroup.getGroupId());
 
             List<Check> checkList = getCheckItemByGroupId(userGroup.getGroupId(),
-                    userGroup.getIsLeader() + 1);
+                    userGroup.getIsleader() + 1);
 
             List<CheckResult> checkResultList = new ArrayList<>();
 

@@ -60,7 +60,7 @@ public class CheckController {
 
     @GetMapping("/get_project_pass_check/{projectId}")
     public ProjectCheckResult getProjectPassCheck(
-            @PathVariable(value = "projectId", required = true) Long projectId){
+       @PathVariable(value = "projectId", required = true) Long projectId){
         ProjectCheckResult projectCheckResult = checkService.getProjectCheckResultByProjectId(projectId, 3);
         return projectCheckResult;
     }
@@ -98,7 +98,6 @@ public class CheckController {
         projectGradeDtoIPage.setCurrent(current);
         projectGradeDtoIPage.setSize(10);
         projectGradeDtoIPage.setRecords(projectGradeDtoList);
-
         return projectGradeDtoIPage;
     }
 

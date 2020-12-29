@@ -52,7 +52,7 @@ public class UserGroupServiceImpl implements UserGroupService{
             userGroupDto.setId(userGroup.getId());
             userGroupDto.setGroupName(group.getName());
             userGroupDto.setUserName(user.getName());
-            userGroupDto.setIsleader(userGroup.getIsLeader());
+            userGroupDto.setIsleader(userGroup.getIsleader());
             //BeanUtils.copyProperties(userGroup, userGroupDto);
             userGroupDtos.add(userGroupDto);
         }
@@ -94,12 +94,12 @@ public class UserGroupServiceImpl implements UserGroupService{
             UserGroupDto userGroupDto = new UserGroupDto();
             //BeanUtils.copyProperties(user, userGroupDto);
             // ===========
-            userGroupDto.setId(member.getId());
-            userGroupDto.setId(member.getUserId());
+            userGroupDto.setId(member.getUserId());//userId
+            userGroupDto.setUserId(member.getUserId());
             userGroupDto.setUserName(user.getName());
             userGroupDto.setGroupId(member.getGroupId());
             userGroupDto.setGroupName(group.getName());
-            userGroupDto.setIsleader(member.getIsLeader());
+            userGroupDto.setIsleader(member.getIsleader());
             // ============
             userGroupDtos.add(userGroupDto);
         }
@@ -130,7 +130,7 @@ public class UserGroupServiceImpl implements UserGroupService{
         queryWrapper.eq(UserGroup.GROUP_ID,userGroup.getGroupId())
                      .eq(UserGroup.IS_LEADER,1);
         List<UserGroup> userGroups=userGroupMapper.selectList(queryWrapper);
-        Assert.isTrue(0==userGroup.getIsLeader()||userGroups.size()<3,"小组最多只能设置三个组长！");
+        Assert.isTrue(0==userGroup.getIsleader()||userGroups.size()<3,"小组最多只能设置三个组长！");
         Assert.isTrue(1 == userGroupMapper.updateById(userGroup), "组长设置失败！");
         return true;
     }

@@ -45,7 +45,7 @@ public class UserGroupController {
         userGroupDto.setId(userGroup.getId());
         userGroupDto.setGroupName(group.getName());
         userGroupDto.setUserName(user.getName());
-        userGroupDto.setIsleader(userGroup.getIsLeader());
+        userGroupDto.setIsleader(userGroup.getIsleader());
         return userGroupDto;
     }
 
@@ -57,12 +57,12 @@ public class UserGroupController {
 
     // 新增保存一个usergroup
     @PostMapping("/save_user_group")
-    public Boolean save(@SpringQueryMap @RequestParam UserGroupParam userGroupParam){
+    public Boolean save(@SpringQueryMap @RequestBody UserGroupParam userGroupParam){
         org.springframework.util.Assert.notNull(userGroupParam.getGroupId(),"项目检查小组不能为空！");
         org.springframework.util.Assert.notNull(userGroupParam.getUserId(),"用户不能为空！");
         org.springframework.util.Assert.notNull(userGroupParam.getIsleader(),"是否为组长不能为空！");
         UserGroup userGroup = new UserGroup();
-        userGroupParam.setIsleader(0L);
+        userGroup.setIsleader(0);
         BeanUtils.copyProperties(userGroupParam, userGroup);
         return userGroupService.save(userGroup);
     }
@@ -95,7 +95,7 @@ public class UserGroupController {
          * private Long isleader;
          */
         UserGroup userGroup=userGroupService.getUserGroupBygroupIduserId(groupId,userId);
-        userGroup.setIsLeader(role);
+        userGroup.setIsleader(role);
         return userGroupService.updateLeader(userGroup);
 
     }
