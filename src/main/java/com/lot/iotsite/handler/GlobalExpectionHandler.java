@@ -25,19 +25,19 @@ public class GlobalExpectionHandler {
 
     @ExceptionHandler(Exception.class)
     public Result errorHandler(Exception ex) {
-        ex.printStackTrace();
+        log.error(ex.getMessage());
         return Result.failure(otherErrorCode,ex.getMessage());
     }
 
     @ExceptionHandler(Error.class)
     public Result SystemErrorHandler(Exception ex) {
-        ex.printStackTrace();
+        log.error(ex.getMessage());
         return Result.failure(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     @ExceptionHandler(value = BusinessException.class)
     public Result handleBusinessException(BusinessException e) {
-        e.printStackTrace();
+        log.error(e.getMessage());
         return Result.failure(e.getResultCode());
     }
 
@@ -45,7 +45,7 @@ public class GlobalExpectionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Result RequestParameterHandler(Exception ex) {
-        ex.printStackTrace();
+        log.error(ex.getMessage());
         return Result.failure(missRequestParamCode,ex.getMessage());
     }
 

@@ -688,7 +688,10 @@ public class CheckServiceImpl implements CheckService {
         Check check=new Check();
         check.setCheckSystemId(checkSystemId);
         check.setDescription(description);
+        check.setUserId(userId);
         check.setGrade(grade);
+        check.setExamState(1);
+        check.setPassState(0);
         checkMapper.update(check,wrapper);
         return true;
     }

@@ -57,7 +57,7 @@ public class UserGroupController {
 
     // 新增保存一个usergroup
     @PostMapping("/save_user_group")
-    public Boolean save(@SpringQueryMap @RequestBody UserGroupParam userGroupParam){
+    public Boolean save(@SpringQueryMap @RequestParam UserGroupParam userGroupParam){
         org.springframework.util.Assert.notNull(userGroupParam.getGroupId(),"项目检查小组不能为空！");
         org.springframework.util.Assert.notNull(userGroupParam.getUserId(),"用户不能为空！");
         org.springframework.util.Assert.notNull(userGroupParam.getIsleader(),"是否为组长不能为空！");
