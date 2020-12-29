@@ -74,7 +74,7 @@ public class UserGroupController {
     }
 
     @GetMapping("/check_group_member/{id}")
-    public List<UserDto> getGroupMember(@PathVariable("id") Long id){
+    public List<UserGroupDto> getGroupMember(@PathVariable("id") Long id){
         return userGroupService.getMember(id);
     }
 

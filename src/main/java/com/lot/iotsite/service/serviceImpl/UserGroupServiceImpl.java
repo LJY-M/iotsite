@@ -82,20 +82,29 @@ public class UserGroupServiceImpl implements UserGroupService{
     }
 
     @Override
-    public List<UserDto> getMember(Long id){
+    public List<UserGroupDto> getMember(Long id){
         QueryWrapper<UserGroup> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq(UserGroup.GROUP_ID, id);
         queryWrapper.orderByAsc(UserGroup.USER_ID);
         // 在UserGroup表中查询到记录相应小组的所有成员记录
         List<UserGroup> userGroups = userGroupMapper.selectList(queryWrapper);
-        List<UserDto> userDtos = new ArrayList<>();
+        List<UserGroupDto> userGroupDtos = new ArrayList<>();
         for(UserGroup member : userGroups){
             User user = userService.getUserById(member.getUserId());
-            UserDto userDto = new UserDto();
-            BeanUtils.copyProperties(user, userDto);
-            userDtos.add(userDto);
+            Group group = groupService.getGroupById(member.getGroupId());
+            UserGroupDto userGroupDto = new UserGroupDto();
+            //BeanUtils.copyProperties(user, userGroupDto);
+            // ===========
+            userGroupDto.setId(member.getId());
+            userGroupDto.setId(member.getUserId());
+            userGroupDto.setUserName(user.getName());
+            userGroupDto.setGroupId(member.getGroupId());
+            userGroupDto.setGroupName(group.getName());
+            userGroupDto.setIsleader(member.getIsLeader());
+            // ============
+            userGroupDtos.add(userGroupDto);
         }
-        return userDtos;
+        return userGroupDtos;
     }
 
     @Override

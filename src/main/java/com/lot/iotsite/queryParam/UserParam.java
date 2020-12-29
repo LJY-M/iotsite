@@ -14,6 +14,6 @@ public class UserParam {
     private String academic;
     private String nativePlace;
     private String address;
-    private Integer telephone;
+    private String telephone;
     private String job;
 }

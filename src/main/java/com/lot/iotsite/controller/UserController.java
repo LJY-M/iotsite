@@ -57,7 +57,7 @@ public class UserController {
                 .put("academic", user.getAcademic())
                 .put("native_place", user.getNativePlace())
                 .put("address", user.getAddress())
-                .put("tellphone", user.getTelephone())
+                .put("telephone", user.getTelephone())
                 .put("job", user.getJob())
                 .map();
     }
@@ -89,6 +89,7 @@ public class UserController {
     public List<SimpleUserDto> getUsers(@RequestParam("name")String name) {
         return userService.getUserByName(name);
     }
+
     //RequiresAuthentication保证只有用户登录成功后才能进入此界面
     //@RequiresAuthentication
     @PostMapping("/index/{id}")
@@ -104,12 +105,12 @@ public class UserController {
                 .put("academic", user.getAcademic())
                 .put("native_place", user.getNativePlace())
                 .put("address", user.getAddress())
-                .put("tellphone", user.getTelephone())
+                .put("telephone", user.getTelephone())
                 .put("job", user.getJob())
                 .map();
     }
 
-    @PostMapping("/update_user/{id}")
+    @PutMapping("/update_user/{id}")
     public Boolean updateUserById(@PathVariable("id") Long id,
                                   @SpringQueryMap @RequestBody UserParam userParam){
         /**可以更改的用户信息：
@@ -125,7 +126,11 @@ public class UserController {
          *     private Integer telephone;
          *     private String job;
          */
+        System.out.println("输出id：" + id);
         User user = userService.getUserById(id);
+        if(userParam.getSex() instanceof String){
+            System.out.println("sex是string类型");
+        }
         userParam.setPassword(SecureUtil.md5(userParam.getPassword()));
         BeanUtils.copyProperties(userParam,user);
         return userService.update(user);
