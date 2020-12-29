@@ -26,7 +26,7 @@ public class AccountProfile implements Serializable {
 
     private String address;
 
-    private Integer telephone;
+    private String telephone;
 
     private String job;
 

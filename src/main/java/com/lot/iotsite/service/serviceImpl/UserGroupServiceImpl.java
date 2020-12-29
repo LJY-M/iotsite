@@ -61,13 +61,12 @@ public class UserGroupServiceImpl implements UserGroupService{
 
     @Override
     public Boolean save(UserGroup userGroup){
-        QueryWrapper<UserGroup> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq(UserGroup.IS_LEADER, userGroup.getIsLeader());
-        List<UserGroup> list = new ArrayList<>();
-        list = userGroupMapper.selectList(queryWrapper);
-        if (list.size()>3){
-            Assert.state(false,"组长人数不能超过3人");
-        }
+//        QueryWrapper<UserGroup> queryWrapper=new QueryWrapper<>();
+//        queryWrapper.eq(UserGroup.IS_LEADER, userGroup.getIsLeader());
+//        List<UserGroup> list = userGroupMapper.selectList(queryWrapper);
+//        if (list.size()>3){
+//            Assert.state(false,"组长人数不能超过3人");
+//        }
         userGroupMapper.insert(userGroup);
         return true;
     }
