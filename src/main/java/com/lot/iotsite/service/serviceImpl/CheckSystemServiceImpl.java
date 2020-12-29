@@ -110,5 +110,10 @@ public class CheckSystemServiceImpl implements CheckSystemService {
        return checkSystemDtos;
     }
 
+    @Override
+    public CheckSystem getFatherCheckSystem(Long subCheckSystemId){
+        CheckSystem subCheckSystem=checkSystemMapper.selectById(subCheckSystemId);
+        return checkSystemMapper.selectById(subCheckSystem.getFatherId());
+    }
 
 }

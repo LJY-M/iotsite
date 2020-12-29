@@ -15,4 +15,5 @@ public interface CheckSystemService {
     CheckSystem getCheckSystemById(Long id);
     Boolean updateCheckSystem(CheckSystem checkSystem);
     List<CheckSystemDto> getChechSystemByName(String name);
+    CheckSystem getFatherCheckSystem(Long subCheckSystemId);
 }

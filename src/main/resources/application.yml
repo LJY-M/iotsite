@@ -8,6 +8,9 @@ spring:
     name: iotsite
   profiles:
     active: local
+  resources:
+    static-locations:
+      classpath: /static/
 
   datasource:
     username: root

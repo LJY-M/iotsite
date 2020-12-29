@@ -6,6 +6,7 @@ import com.lot.iotsite.domain.ChartElements;
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.Picture;
 import com.lot.iotsite.domain.ProjectCheckResult;
+import com.lot.iotsite.dto.CheckDto;
 import com.lot.iotsite.dto.CheckItemDto;
 import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
@@ -226,5 +227,10 @@ public class CheckController {
                             @RequestParam("checkSystemId") Long checkSystemId,
                             @RequestParam("grade") Integer grade, @RequestParam("description") String description){
         return checkService.insertChecks(projectId,userId,checkSystemId,grade,description);
+    }
+
+    @GetMapping("/{projectId}/check")
+    public List<CheckDto> getProjectCheckRecords(@PathVariable("projectId") Long projectId){
+        return checkService.getChecks(projectId);
     }
 }

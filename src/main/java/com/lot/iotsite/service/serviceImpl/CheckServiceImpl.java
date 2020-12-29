@@ -2,11 +2,9 @@ package com.lot.iotsite.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.constant.Progress;
+import com.lot.iotsite.constant.RiskLevel;
 import com.lot.iotsite.domain.*;
-import com.lot.iotsite.dto.CheckItemDto;
-import com.lot.iotsite.dto.ProjectGradeDto;
-import com.lot.iotsite.dto.UserGroupCheckDto;
-import com.lot.iotsite.dto.UserGroupDto;
+import com.lot.iotsite.dto.*;
 import com.lot.iotsite.mapper.CheckMapper;
 import com.lot.iotsite.mapper.PictureMapper;
 import com.lot.iotsite.mapper.ProjectMapper;
@@ -701,5 +699,24 @@ public class CheckServiceImpl implements CheckService {
         check.setExamState(1);
         Assert.isTrue(1==checkMapper.insert(check),"创建项目失败!");
         return true;
+    }
+
+    @Override
+    public List<CheckDto> getChecks(Long projectId){
+        List<CheckDto> checkDtos=new ArrayList<>();
+        QueryWrapper<Check> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq(Check.PROJECT_ID,projectId);
+        List<Check> checks=checkMapper.selectList(queryWrapper);
+        for(Check check:checks){
+            CheckDto checkDto=new CheckDto();
+            checkDto.setId(check.getId());
+            checkDto.setFinshDateTime(check.getFinishDateTime());
+            checkDto.setUserName(userService.getUserById(check.getUserId()).getName());
+            checkDto.setRisk(RiskLevel.getStatus(check.getGrade()));
+            checkDto.setCheckSystems(checkSystemService.getFatherCheckSystem(check.getCheckSystemId()).getName()+"->"
+                    +checkSystemService.getCheckSystemById(check.getCheckSystemId()).getName());
+            checkDtos.add(checkDto);
+        }
+        return checkDtos;
     }
 }

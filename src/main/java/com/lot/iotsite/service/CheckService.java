@@ -3,6 +3,7 @@ package com.lot.iotsite.service;
 import com.lot.iotsite.domain.ChartElements;
 import com.lot.iotsite.domain.Check;
 import com.lot.iotsite.domain.ProjectCheckResult;
+import com.lot.iotsite.dto.CheckDto;
 import com.lot.iotsite.dto.CheckItemDto;
 import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
@@ -51,4 +52,5 @@ public interface CheckService {
     Boolean insertChecks(Long projectId,Long userId,Long checkSystemId,Integer grade, String description);
 
     Boolean insertCheck(Check check);
+    List<CheckDto> getChecks(Long projectId);
 }
