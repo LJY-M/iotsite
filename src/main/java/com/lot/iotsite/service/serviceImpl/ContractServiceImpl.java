@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lot.iotsite.constant.Progress;
-import com.lot.iotsite.domain.Contract;
-import com.lot.iotsite.domain.Project;
-import com.lot.iotsite.domain.UserGroup;
+import com.lot.iotsite.domain.*;
 import com.lot.iotsite.dto.*;
 import com.lot.iotsite.mapper.ContractMapper;
 import com.lot.iotsite.service.*;
@@ -39,6 +37,9 @@ public class ContractServiceImpl implements ContractService {
 
     @Autowired
     private ProjectToCheckSystemService projectToCheckSystemService;
+
+    @Autowired
+    private CheckService checkService;
 
     @Override
     public Boolean addContract(Contract contract) {
@@ -140,7 +141,19 @@ public class ContractServiceImpl implements ContractService {
             projectAllDto.setProjectId(project.getId());
             projectAllDto.setProjectName(project.getName());
             projectAllDto.setClientId(project.getClientId());
-            projectAllDto.setCheckSystems(projectToCheckSystemService.getCheckSystemNameByProject(project.getId()));
+            List<CheckSystemDto> checkSystemdtos=projectToCheckSystemService.getCheckSystemNameByProject(project.getId());
+            List<CheckSystemStatusDto> checkSystemStatusDtos=new ArrayList<>();
+            for(CheckSystemDto checkSystemDto:checkSystemdtos) {
+                for (CheckSystemDto checkSystemDto1 : checkSystemDto.getSubCheckSystems()) {
+                    CheckSystemStatusDto checkSystemStatusDto = new CheckSystemStatusDto();
+                    Check check = checkService.getCheckByProjectIdAndCheckSystemId(project.getId(), checkSystemDto1.getId());
+                    BeanUtils.copyProperties(checkSystemDto1, checkSystemStatusDto);
+                    checkSystemStatusDto.setExamState(check.getExamState());
+                    checkSystemStatusDto.setPassState(check.getPassState());
+                    checkSystemStatusDtos.add(checkSystemStatusDto);
+                }
+            }
+            projectAllDto.setCheckSystems(checkSystemStatusDtos);
             projectAllDtos.add(projectAllDto);
         }
         for(Contract contract:contracts){
