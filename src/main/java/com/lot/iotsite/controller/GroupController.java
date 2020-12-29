@@ -47,12 +47,12 @@ public class GroupController {
     }
 
     @PutMapping("/update_group/{id}")
-    public Boolean updateUserById(@PathVariable("id") Long id,
+    public Boolean updateUserById(@PathVariable("id") String id,
                                   @SpringQueryMap @RequestBody GroupParam groupParam){
         /**可以更改的用户信息：
          * private String name;
          */
-        Group group = groupService.getGroupById(id);
+        Group group = groupService.getGroupById(Long.valueOf(id));
         BeanUtils.copyProperties(groupParam, group);
         return groupService.update(group);
     }

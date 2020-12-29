@@ -6,7 +6,6 @@ import com.lot.iotsite.domain.*;
 import com.lot.iotsite.dto.CheckItemDto;
 import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
-import com.lot.iotsite.dto.UserGroupDto;
 import com.lot.iotsite.mapper.CheckMapper;
 import com.lot.iotsite.mapper.PictureMapper;
 import com.lot.iotsite.mapper.ProjectMapper;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
 
 @Service
@@ -53,6 +51,7 @@ public class CheckServiceImpl implements CheckService {
     public Check getCheckById(Long id) {
         return checkMapper.selectById(id);
     }
+
 
     @Override
     public ProjectCheckResult getProjectCheckResultByProjectId(Long projectId, int checkFlag) {
