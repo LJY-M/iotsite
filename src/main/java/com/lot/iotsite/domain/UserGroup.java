@@ -13,7 +13,7 @@ public class UserGroup extends BaseEntity {
     @TableField("group_id")
     private Long groupId;
     @TableField("isleader")
-    private Integer isLeader;
+    private Integer isleader;
 
     public static final String USER_ID = "user_id";
     public static final String GROUP_ID = "group_id";

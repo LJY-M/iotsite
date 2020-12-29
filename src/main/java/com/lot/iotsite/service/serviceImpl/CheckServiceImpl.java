@@ -242,7 +242,7 @@ public class CheckServiceImpl implements CheckService {
             Group group = groupService.getGroupById(userGroup.getGroupId());
 
             List<Check> checkList = getCheckItemByGroupId(userGroup.getGroupId(),
-                    userGroup.getIsLeader() + 1);
+                    userGroup.getIsleader() + 1);
 
             List<CheckResult> checkResultList = new ArrayList<>();
 
