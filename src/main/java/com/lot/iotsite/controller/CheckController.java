@@ -101,7 +101,7 @@ public class CheckController {
         return projectGradeDtoIPage;
     }
 
-        @GetMapping("/get_check_item_by_project_id")
+    @GetMapping("/get_check_item_by_project_id")
     public IPage<CheckItemDto> getCheckItemByProjectId(
             @RequestParam(value = "projectId", required = true) Long projectId,
             @RequestParam("page") Long current){

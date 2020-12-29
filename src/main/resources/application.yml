@@ -10,12 +10,12 @@ spring:
     active: local
   resources:
     static-locations:
-      classpath: /static/
+      classpath:/static/
 
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://39.106.66.219:3306/smart_db?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://39.106.66.219:3306/smart_cp?useSSL=false&useUnicode=true&characterEncoding=utf-8
     driver-class-name: com.mysql.jdbc.Driver
 
 
