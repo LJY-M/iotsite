@@ -85,16 +85,17 @@ public class UserGroupController {
 
     // 更新一个usergroup的成员信息
     @PutMapping("/update_leader")
-    public Boolean updateLeader(@Validated @RequestParam(value = "groupId") Long groupId,
+    public Boolean updateLeader(@RequestParam(value = "groupId") Long groupId,
                                 @RequestParam(value = "userId") Long userId,
-                                 @SpringQueryMap @RequestBody UserGroupParam userGroupParam){
+                                 @RequestParam(value = "role")Integer role){
         /**可以更改的用户信息：
          * private Long userId;
          * private Long groupId;
          * private Long isleader;
          */
-        UserGroup userGroup = userGroupService.getUserGroupBygroupIduserId(groupId, userId);
-        BeanUtils.copyProperties(userGroupParam,userGroup);
+        UserGroup userGroup=userGroupService.getUserGroupBygroupIduserId(groupId,userId);
+        userGroup.setIsLeader(role);
         return userGroupService.updateLeader(userGroup);
+
     }
 }

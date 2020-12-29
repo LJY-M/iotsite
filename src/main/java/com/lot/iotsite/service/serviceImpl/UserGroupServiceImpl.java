@@ -118,9 +118,15 @@ public class UserGroupServiceImpl implements UserGroupService{
 
     @Override
     public Boolean updateLeader(UserGroup userGroup){
+        QueryWrapper<UserGroup> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq(UserGroup.GROUP_ID,userGroup.getGroupId())
+                     .eq(UserGroup.IS_LEADER,1);
+        List<UserGroup> userGroups=userGroupMapper.selectList(queryWrapper);
+        Assert.isTrue(0==userGroup.getIsLeader()||userGroups.size()<3,"小组最多只能设置三个组长！");
         Assert.isTrue(1 == userGroupMapper.updateById(userGroup), "组长设置失败！");
         return true;
     }
+
 
     @Override
     public UserGroup getUserGroupBygroupIduserId(Long groupId, Long userId){

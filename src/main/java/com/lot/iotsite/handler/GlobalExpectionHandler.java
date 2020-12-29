@@ -63,7 +63,7 @@ public class GlobalExpectionHandler {
     /**
      * 处理Assert的异常
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    //@ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = IllegalArgumentException.class)
     public Result handler(IllegalArgumentException e) throws IOException {
         log.error("Assert断言异常:-------------->{}",e.getMessage());
