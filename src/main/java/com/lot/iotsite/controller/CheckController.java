@@ -118,9 +118,8 @@ public class CheckController {
 
     @GetMapping("/get_check_item_by_check_id")
     public CheckItemDto getCheckItemByCheckId(
-            @RequestParam(value = "checkId", required = true) Long checkId){
-        CheckItemDto checkItemDto = new CheckItemDto();
-        checkItemDto = checkService.getCheckItemByCheckId(checkId);
+            @RequestParam(value = "checkId") Long checkId){
+        CheckItemDto checkItemDto = checkService.getCheckItemByCheckId(checkId);
         return checkItemDto;
     }
 
