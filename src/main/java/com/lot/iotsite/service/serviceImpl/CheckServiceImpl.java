@@ -4,15 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.constant.Progress;
 import com.lot.iotsite.constant.RiskLevel;
 import com.lot.iotsite.domain.*;
-<<<<<<< .mine
+
 import com.lot.iotsite.dto.*;
 
 
-=======
+
 import com.lot.iotsite.dto.CheckItemDto;
 import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
->>>>>>> .theirs
+
 import com.lot.iotsite.mapper.CheckMapper;
 import com.lot.iotsite.mapper.PictureMapper;
 import com.lot.iotsite.mapper.ProjectMapper;
