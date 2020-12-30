@@ -53,4 +53,5 @@ public interface CheckService {
 
     Boolean insertCheck(Check check);
     List<CheckDto> getChecks(Long projectId);
+    Check getCheckByProjectAndCheckSystemId(Long projectId,Long checkSystemId);
 }

@@ -4,15 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lot.iotsite.constant.Progress;
 import com.lot.iotsite.constant.RiskLevel;
 import com.lot.iotsite.domain.*;
-
 import com.lot.iotsite.dto.*;
-
-
-
 import com.lot.iotsite.dto.CheckItemDto;
 import com.lot.iotsite.dto.ProjectGradeDto;
 import com.lot.iotsite.dto.UserGroupCheckDto;
-
 import com.lot.iotsite.mapper.CheckMapper;
 import com.lot.iotsite.mapper.PictureMapper;
 import com.lot.iotsite.mapper.ProjectMapper;
@@ -21,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -684,6 +680,7 @@ public class CheckServiceImpl implements CheckService {
         QueryWrapper<Check> wrapper=new QueryWrapper<>();
         wrapper.eq(Check.PROJECT_ID,projectId)
                 .eq(Check.CHECK_SYSTEM_ID,checkSystemId);
+        Assert.isTrue(checkMapper.selectOne(wrapper).getExamState()==0,"该项检查不在待检查状态！");
         Check check=new Check();
         check.setCheckSystemId(checkSystemId);
         check.setDescription(description);
@@ -691,6 +688,7 @@ public class CheckServiceImpl implements CheckService {
         check.setGrade(grade);
         check.setExamState(1);
         check.setPassState(0);
+        check.setFinishDateTime(LocalDateTime.now());
         checkMapper.update(check,wrapper);
         return true;
     }
@@ -719,5 +717,13 @@ public class CheckServiceImpl implements CheckService {
             checkDtos.add(checkDto);
         }
         return checkDtos;
+    }
+
+    @Override
+    public Check getCheckByProjectAndCheckSystemId(Long projectId,Long checkSystemId){
+        QueryWrapper<Check> checkQueryWrapper=new QueryWrapper<>();
+        checkQueryWrapper.eq(Check.PROJECT_ID,projectId)
+                .eq(Check.CHECK_SYSTEM_ID,checkSystemId);
+        return checkMapper.selectOne(checkQueryWrapper);
     }
 }

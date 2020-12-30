@@ -9,5 +9,5 @@ public class ProjectAllDto {
         private Long projectId;
         private String projectName;
         private Long clientId;
-        List<CheckSystemDto> checkSystems;
+        List<CheckSystemStatusDto> checkSystems;
 }
